@@ -1,0 +1,46 @@
+@import "./variables.css";
+@import "./light.css";
+@import "./dark.css";
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+
+    background:var(--bg);
+    color:var(--text);
+
+    transition:background .25s,color .25s;
+
+    font-family:Inter,sans-serif;
+}
+
+a{
+    text-decoration:none;
+    color:inherit;
+}
+
+button{
+
+    transition:var(--transition);
+
+}
+
+.card-theme{
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius-lg);
+
+    box-shadow:var(--shadow-light);
+
+}

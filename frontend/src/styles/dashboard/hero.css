@@ -1,0 +1,43 @@
+.hero{
+    padding:2rem;
+}
+
+.hero-content{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:2rem;
+}
+
+.hero-greeting{
+    color:var(--text-secondary);
+    font-size:.95rem;
+}
+
+.hero-title{
+    margin-top:.5rem;
+    font-size:2.2rem;
+    color:var(--text);
+}
+
+.hero-description{
+    margin-top:.5rem;
+    color:var(--text-secondary);
+}
+
+.hero-button{
+    display:flex;
+    align-items:center;
+    gap:.5rem;
+
+    padding:.9rem 1.4rem;
+
+    background:var(--primary);
+    color:white;
+
+    border:none;
+
+    border-radius:var(--radius-lg);
+
+    cursor:pointer;
+}

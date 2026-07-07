@@ -1,0 +1,57 @@
+.chat-header{
+    padding:1rem 1.5rem;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:1rem;
+}
+
+.chat-info{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:1rem;
+
+}
+
+.chat-avatar{
+
+    width:55px;
+
+    height:55px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:var(--primary);
+
+    color:white;
+
+}
+
+.chat-info h4{
+
+    margin:0;
+
+    color:var(--text);
+
+}
+
+.chat-info span{
+
+    color:var(--text-secondary);
+
+    font-size:.9rem;
+
+}

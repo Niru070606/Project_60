@@ -1,0 +1,59 @@
+.message-row{
+
+    display:flex;
+
+    margin-bottom:1rem;
+
+}
+
+.message-row.user{
+
+    justify-content:flex-end;
+
+}
+
+.message-row.ai{
+
+    justify-content:flex-start;
+
+}
+
+.message-bubble{
+
+    max-width:70%;
+
+    padding:1rem;
+
+    border-radius:18px;
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+}
+
+.message-row.user .message-bubble{
+
+    background:var(--primary);
+
+    color:white;
+
+}
+
+.message-bubble p{
+
+    margin:0;
+
+}
+
+.message-bubble span{
+
+    display:block;
+
+    margin-top:.4rem;
+
+    font-size:.75rem;
+
+    opacity:.7;
+
+}

@@ -1,0 +1,50 @@
+.quick-actions{
+    margin-top:1.5rem;
+    padding:1.5rem;
+}
+
+.action-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+
+    gap:1rem;
+
+}
+
+.action-btn{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:.8rem;
+
+    padding:1.5rem;
+
+    background:var(--surface);
+
+    color:var(--text);
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius-lg);
+
+    cursor:pointer;
+
+    transition:var(--transition);
+
+}
+
+.action-btn:hover{
+
+    transform:translateY(-3px);
+
+    background:var(--surface-hover);
+
+}

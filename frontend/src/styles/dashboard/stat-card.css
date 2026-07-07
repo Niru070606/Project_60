@@ -1,0 +1,46 @@
+.stat-card{
+    display:flex;
+    align-items:center;
+    gap:1rem;
+
+    padding:1.5rem;
+
+    transition:var(--transition);
+
+    cursor:pointer;
+}
+
+.stat-card:hover{
+    transform:translateY(-3px);
+}
+
+.stat-card-icon{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    width:56px;
+    height:56px;
+
+    border-radius:50%;
+
+    background:var(--primary);
+
+    color:white;
+}
+
+.stat-card-title{
+    margin:0;
+
+    color:var(--text-secondary);
+
+    font-size:.9rem;
+}
+
+.stat-card-value{
+    margin-top:.2rem;
+
+    color:var(--text);
+
+    font-weight:700;
+}
