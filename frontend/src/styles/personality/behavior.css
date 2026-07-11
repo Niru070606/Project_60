@@ -1,0 +1,61 @@
+.behavior-card{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:1.5rem;
+
+    padding:1.5rem;
+
+}
+
+.behavior-title{
+
+    font-size:1.25rem;
+
+    font-weight:600;
+
+}
+
+.behavior-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:.5rem;
+
+}
+
+.behavior-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+.behavior-label{
+
+    font-weight:500;
+
+    color:var(--text);
+
+}
+
+.behavior-value{
+
+    font-size:.9rem;
+
+    color:var(--text-secondary);
+
+}
+
+.behavior-slider{
+
+    width:100%;
+
+}

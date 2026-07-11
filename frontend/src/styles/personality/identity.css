@@ -1,0 +1,64 @@
+.identity-card{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:1.5rem;
+    padding:1.5rem;
+
+}
+
+.identity-title{
+
+    font-size:1.25rem;
+
+    font-weight:600;
+
+}
+
+.identity-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:.5rem;
+
+}
+
+.identity-label{
+
+    font-weight:500;
+
+    color:var(--text);
+
+}
+
+.identity-input,
+.identity-select{
+
+    width:100%;
+
+    padding:.75rem 1rem;
+
+    background:var(--bg);
+
+    color:var(--text);
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius-lg);
+
+    transition:var(--transition);
+
+}
+
+.identity-input:focus,
+.identity-select:focus{
+
+    outline:none;
+
+    border-color:var(--primary);
+
+}
