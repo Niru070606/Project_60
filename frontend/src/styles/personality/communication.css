@@ -1,0 +1,40 @@
+.communication-card{
+
+    display:flex;
+    flex-direction:column;
+    gap:1.5rem;
+
+    padding:1.5rem;
+
+}
+
+.communication-title{
+
+    font-size:1.25rem;
+    font-weight:600;
+
+}
+
+.communication-group{
+
+    display:flex;
+    flex-direction:column;
+
+    gap:.5rem;
+
+}
+
+.communication-label{
+
+    font-weight:500;
+
+    color:var(--text);
+
+}
+
+.communication-select,
+.communication-slider{
+
+    width:100%;
+
+}

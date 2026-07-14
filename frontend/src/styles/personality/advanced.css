@@ -1,0 +1,53 @@
+.advanced-card{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:1.5rem;
+
+    padding:1.5rem;
+
+}
+
+.advanced-title{
+
+    font-size:1.25rem;
+
+    font-weight:600;
+
+}
+
+.advanced-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:.5rem;
+
+}
+
+.advanced-label{
+
+    font-weight:500;
+
+    color:var(--text);
+
+}
+
+.advanced-select,
+.advanced-slider,
+.advanced-textarea{
+
+    width:100%;
+
+}
+
+.advanced-textarea{
+
+    resize:vertical;
+
+    min-height:120px;
+
+}
