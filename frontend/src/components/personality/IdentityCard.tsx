@@ -2,6 +2,7 @@ import "../../styles/personality/identity.css";
 
 import type { ChangeEvent } from "react";
 import type { PersonalityCardProps } from "../../types/personalityCardProps";
+import { updatePersonality } from "../../utils/updatePersonality";
 
 export default function IdentityCard({
   personality,
@@ -12,13 +13,15 @@ export default function IdentityCard({
   ) => {
     const { name, value } = e.target;
 
-    setPersonality((prev) => ({
-      ...prev,
-      identity: {
-        ...prev.identity,
-        [name]: name === "age" ? (value === "" ? null : Number(value)) : value,
-      },
-    }));
+    updatePersonality(
+      "identity",
+
+      name,
+
+      name === "age" ? (value === "" ? null : Number(value)) : value,
+
+      setPersonality,
+    );
   };
 
   return (

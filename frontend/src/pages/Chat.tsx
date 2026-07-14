@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import ChatHeader from "../components/chat/ChatHeader";
 import ChatMessages from "../components/chat/ChatMessages";
 import ChatInput from "../components/chat/ChatInput";
-import { sendMessage } from "../services/chatService";
+import { sendMessage, resetChat  } from "../services/chatService";
 
 
 interface Message {
@@ -83,17 +83,26 @@ export default function Chat() {
     }
   }
 
-  function handleClearChat() {
-    localStorage.removeItem("messages");
+  async function handleClearChat() {
+    try {
+      await resetChat();
 
-    setMessages([
-      {
-        id: 1,
-        sender: "ai",
-        message: "Hello Neil! 👋 How are you feeling today?",
-        time: "10:32 AM",
-      },
-    ]);
+      localStorage.removeItem("messages");
+
+      setMessages([
+        {
+          id: 1,
+          sender: "ai",
+          message: "Hello Neil! 👋 How are you feeling today?",
+          time: new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        },
+      ]);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (

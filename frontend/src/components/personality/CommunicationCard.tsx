@@ -2,6 +2,7 @@ import "../../styles/personality/communication.css";
 
 import type { ChangeEvent } from "react";
 import type { PersonalityCardProps } from "../../types/personalityCardProps";
+import { updatePersonality } from "../../utils/updatePersonality";
 
 export default function CommunicationCard({
   personality,
@@ -12,15 +13,15 @@ export default function CommunicationCard({
   ) => {
     const { name, value } = e.target;
 
-    setPersonality((prev) => ({
-      ...prev,
+    updatePersonality(
+      "communication",
 
-      communication: {
-        ...prev.communication,
+      name,
 
-        [name]: name === "emojiUsage" ? Number(value) : value,
-      },
-    }));
+      name === "emojiUsage" ? Number(value) : value,
+
+      setPersonality,
+    );
   };
 
   return (

@@ -2,6 +2,7 @@ import "../../styles/personality/behavior.css";
 
 import type { ChangeEvent } from "react";
 import type { PersonalityCardProps } from "../../types/personalityCardProps";
+import { updatePersonality } from "../../utils/updatePersonality";
 
 const behaviorTraits = [
   { key: "humor", label: "Humor" },
@@ -18,18 +19,20 @@ export default function BehaviorCard({
   personality,
   setPersonality,
 }: PersonalityCardProps) {
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     const { name, value } = e.target;
 
-    setPersonality((prev) => ({
-      ...prev,
+    updatePersonality(
+      "behavior",
 
-      behavior: {
-        ...prev.behavior,
+      name,
 
-        [name]: Number(value),
-      },
-    }));
+      Number(value),
+
+      setPersonality,
+    );
   };
 
   return (

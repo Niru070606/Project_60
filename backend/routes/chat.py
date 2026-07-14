@@ -1,5 +1,9 @@
 from flask import Blueprint, request, jsonify
-from services.ai_service import generate_reply
+
+from services.chat_service import (
+    send_message,
+    reset_chat
+)
 
 chat_bp = Blueprint("chat", __name__)
 
@@ -8,10 +12,20 @@ def chat():
 
     data = request.json
 
-    message = data["message"]
+    user_message = data["message"]
 
-    reply = generate_reply(message)
+    reply = send_message(user_message)
 
     return jsonify({
         "reply": reply
+    })
+
+
+@chat_bp.route("/chat/reset", methods=["POST"])
+def reset():
+
+    reset_chat()
+
+    return jsonify({
+        "success": True
     })

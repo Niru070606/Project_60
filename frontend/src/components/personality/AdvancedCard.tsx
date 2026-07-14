@@ -2,6 +2,7 @@ import "../../styles/personality/advanced.css";
 
 import type { ChangeEvent } from "react";
 import type { PersonalityCardProps } from "../../types/personalityCardProps";
+import { updatePersonality } from "../../utils/updatePersonality";
 
 export default function AdvancedCard({
   personality,
@@ -13,13 +14,15 @@ export default function AdvancedCard({
   ) => {
     const { name, value } = e.target;
 
-    setPersonality((prev) => ({
-      ...prev,
-      identity: {
-        ...prev.identity,
-        [name]: name === "age" ? (value === "" ? null : Number(value)) : value,
-      },
-    }));
+    updatePersonality(
+      "advanced",
+
+      name,
+
+      name === "responseRandomness" ? Number(value) : value,
+
+      setPersonality,
+    );
   };
 
   return (

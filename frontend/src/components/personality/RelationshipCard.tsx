@@ -2,6 +2,7 @@ import "../../styles/personality/relationship.css";
 
 import type { ChangeEvent } from "react";
 import type { PersonalityCardProps } from "../../types/personalityCardProps";
+import { updatePersonality } from "../../utils/updatePersonality";
 
 export default function RelationshipCard({
   personality,
@@ -13,13 +14,15 @@ export default function RelationshipCard({
   ) => {
     const { name, value } = e.target;
 
-    setPersonality((prev) => ({
-      ...prev,
-      identity: {
-        ...prev.identity,
-        [name]: name === "age" ? (value === "" ? null : Number(value)) : value,
-      },
-    }));
+    updatePersonality(
+      "relationship",
+
+      name,
+
+      name === "respectLevel" ? Number(value) : value,
+
+      setPersonality,
+    );
   };
 
   return (

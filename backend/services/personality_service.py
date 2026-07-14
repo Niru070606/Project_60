@@ -1,6 +1,14 @@
-def get_system_prompt():
-    return """
-You are Lecyrus.
+current_personality = {}
 
-You are the AI companion of Project-60.
-"""
+print("personality_service loaded:", id(current_personality))
+
+
+def save_personality(personality: dict):
+    global current_personality
+    current_personality = personality
+    print("Saved id:", id(current_personality))
+
+
+def get_personality():
+    print("Read id:", id(current_personality))
+    return current_personality

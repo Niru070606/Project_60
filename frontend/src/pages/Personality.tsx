@@ -1,9 +1,17 @@
 import "../styles/common/form.css";
 import "../styles/personality/personality.css";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import type { Personality } from "../types/personality";
+import { defaultPersonality } from "../utils/defaultPersonality";
+
+import {
+  loadPersonality,
+  savePersonality,
+  deletePersonality
+} from "../services/personalityService";
+
+import { uploadPersonality } from "../services/personalityApi";
 
 import IdentityCard from "../components/personality/IdentityCard";
 import CommunicationCard from "../components/personality/CommunicationCard";
@@ -13,64 +21,19 @@ import RelationshipCard from "../components/personality/RelationshipCard";
 import AdvancedCard from "../components/personality/AdvancedCard";
 
 export default function Personality() {
-  const [personality, setPersonality] = useState<Personality>({
-    identity: {
-      name: "Niru",
-      nickname: "Niru",
-      gender: "Male",
-      pronouns: "He/Him",
-      species: "Artificial Intelligence",
-      role: "AI Companion",
-      age: null,
-      birthday: "",
-    },
+  const [personality, setPersonality] = useState(
+    () => loadPersonality() ?? defaultPersonality,
+  );
 
-    communication: {
-      tone: "Calm",
-      language: "English",
-      verbosity: "Medium",
-      greetingStyle: "Cheerful",
-      emojiUsage: 10,
-      typingStyle: "Natural",
-    },
+  const handleReset = () => {
+    deletePersonality();
+    setPersonality(structuredClone(defaultPersonality));
+  };
 
-    behavior: {
-      humor: 10,
-      empathy: 10,
-      confidence: 10,
-      patience: 10,
-      curiosity: 10,
-      creativity: 10,
-      optimism: 10,
-      assertiveness: 10,
-    },
-
-    teaching: {
-      teachingStyle: "Socratic",
-      explanationDepth: 70,
-      useExamples: "Often",
-      useAnalogies: "Often",
-      askFollowUpQuestions: "Sometimes",
-      encourageLearning: "High",
-    },
-
-    relationship: {
-      relationshipType: "Companion",
-      addressUserAs: "",
-      respectLevel: 70,
-      conversationStyle: "Balanced",
-      initiateConversation: "Sometimes",
-    },
-
-    advanced: {
-      responseRandomness: 50,
-      maximumResponseLength: "Medium",
-      admitUncertainty: "Always",
-      aiIdentityDisclosure: "Only When Asked",
-      customPrompt: "",
-      systemRules: "",
-    },
-  });
+  useEffect(() => {
+    savePersonality(personality);
+    uploadPersonality(personality);
+  }, [personality]);
 
   return (
     <div className="container py-4 marginizer">
@@ -103,6 +66,12 @@ export default function Personality() {
       <br />
 
       <AdvancedCard personality={personality} setPersonality={setPersonality} />
+      <br />
+      <div className="d-flex justify-content-end mt-4">
+        <button className="btn btn-outline-danger" onClick={handleReset}>
+          Reset to Default
+        </button>
+      </div>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import "../../styles/personality/teaching.css";
 
 import type { ChangeEvent } from "react";
 import type { PersonalityCardProps } from "../../types/personalityCardProps";
+import { updatePersonality } from "../../utils/updatePersonality";
 
 export default function TeachingCard({
   personality,
@@ -13,13 +14,15 @@ export default function TeachingCard({
   ) => {
     const { name, value } = e.target;
 
-    setPersonality((prev) => ({
-      ...prev,
-      identity: {
-        ...prev.identity,
-        [name]: name === "age" ? (value === "" ? null : Number(value)) : value,
-      },
-    }));
+    updatePersonality(
+      "teaching",
+
+      name,
+
+      name === "explanationDepth" ? Number(value) : value,
+
+      setPersonality,
+    );
   };
 
   return (
