@@ -5,6 +5,7 @@ import ChatHeader from "../components/chat/ChatHeader";
 import ChatMessages from "../components/chat/ChatMessages";
 import ChatInput from "../components/chat/ChatInput";
 import { sendMessage, resetChat  } from "../services/chatService";
+import { getMessages } from "../services/messageService";
 
 
 interface Message {
@@ -15,66 +16,49 @@ interface Message {
 }
 
 export default function Chat() {
-  const [messages, setMessages] = useState<Message[]>(() => {
-    const savedMessages = localStorage.getItem("messages");
-
-    if (savedMessages) {
-      return JSON.parse(savedMessages) as Message[];
-    }
-
-    return [
-      {
-        id: 1,
-        sender: "ai",
-        message: "Hello Neil! 👋 How are you feeling today?",
-        time: "10:32 AM",
-      }
-    ];
-  });
+  const [messages, setMessages] = useState<Message[]>([]);
 
   const [isTyping, setIsTyping] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
 
 
+  async function loadMessages() {
+    try {
+      const data = await getMessages();
+
+      if (data.length === 0) {
+        setMessages([
+          {
+            id: 1,
+            sender: "ai",
+            message: "Hello Neil! 👋 How are you feeling today?",
+            time: "10:32 AM",
+          },
+        ]);
+      } else {
+        setMessages(data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   useEffect(() => {
-    localStorage.setItem("messages", JSON.stringify(messages));
-  }, [messages]);
+    loadMessages();
+  }, []);
 
   async function handleSend(message: string) {
     try {
-      const newMessage: Message = {
-        id: Date.now(),
-        sender: "user",
-        message,
-        time: new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-      };
-
-      setMessages((prev) => [...prev, newMessage]);
-
       setIsLoading(true);
       setIsTyping(true);
 
-      const reply = await sendMessage(message);
+      await sendMessage(message);
 
-      const aiReply: Message = {
-        id: Date.now() + 1,
-        sender: "ai",
-        message: reply,
-        time: new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-      };
+      await loadMessages();
 
-      setTimeout(() => {
-        setMessages((prev) => [...prev, aiReply]);
-        setIsTyping(false);
-        setIsLoading(false);
-      }, 1000);
+      setIsTyping(false);
+      setIsLoading(false);;
     } catch (error) {
       console.error("Failed to send message:", error);
 
@@ -86,20 +70,7 @@ export default function Chat() {
   async function handleClearChat() {
     try {
       await resetChat();
-
-      localStorage.removeItem("messages");
-
-      setMessages([
-        {
-          id: 1,
-          sender: "ai",
-          message: "Hello Neil! 👋 How are you feeling today?",
-          time: new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          }),
-        },
-      ]);
+      setMessages([]);
     } catch (error) {
       console.error(error);
     }
