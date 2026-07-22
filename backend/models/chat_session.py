@@ -14,6 +14,11 @@ class ChatSession(db.Model):
         db.ForeignKey("conversations.id"),
         nullable=False
     )
+    
+    summary = db.Column(
+        db.Text,
+        nullable=True
+    )
 
     created_at = db.Column(
         db.DateTime,

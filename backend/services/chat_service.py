@@ -5,6 +5,9 @@ from config import Config
 from services.personality_service import get_personality
 from services.prompt_builder import build_system_prompt
 
+from services.memory_service import load_memories
+
+
 client = genai.Client(
     api_key=Config.GEMINI_API_KEY
 )
@@ -19,10 +22,12 @@ def start_chat():
 
     personality = get_personality()
 
-    print("START CHAT")
-    print(personality)
+    memories = load_memories()
 
-    prompt = build_system_prompt(personality)
+    prompt = build_system_prompt(
+        personality,
+        memories,
+    )
 
     chat = client.chats.create(
         model="gemini-2.5-flash",
