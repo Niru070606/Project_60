@@ -20,3 +20,10 @@ class Conversation(db.Model):
         lazy=True,
         cascade="all, delete-orphan"
     )
+
+    memories = db.relationship(
+        "Memory",
+        backref="conversation",
+        lazy=True,
+        cascade="all, delete-orphan"
+    )

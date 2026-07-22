@@ -1,0 +1,31 @@
+.memory-card{
+    max-width: 140rem;
+
+    margin: 0 auto 1.5rem auto;
+
+    padding: 1.5rem;
+
+    border-radius: 18px;
+
+    background: var(--card-bg);
+
+    border: 1px solid var(--border);
+
+    transition: .2s ease;
+}
+
+.memory-content{
+    flex:1;
+}
+
+.memory-content h5{
+    margin-bottom:10px;
+    font-weight:600;
+}
+
+.memory-meta{
+    display:flex;
+    gap:18px;
+    font-size:.9rem;
+    opacity:.75;
+}

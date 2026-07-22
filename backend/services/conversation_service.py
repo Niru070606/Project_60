@@ -2,9 +2,13 @@ from repositories.conversation_repository import get_or_create_conversation
 from repositories.chat_session_repository import (
     create_session,
     get_latest_session,
+    update_summary
 )
 from repositories.message_repository import (save_message, get_messages)
 from services.chat_service import send_message
+
+from services.session_summary_service import summarize_session
+from services.memory_service import save_extracted_memories
 
 def chat(message: str) -> str:
 
@@ -32,7 +36,27 @@ def chat(message: str) -> str:
     return reply
 
 def start_new_session():
+
     conversation = get_or_create_conversation()
+
+    current_session = get_latest_session(conversation.id)
+
+    if current_session:
+
+        messages = get_messages(current_session.id)
+
+        if messages:
+
+            reflection = summarize_session(messages)
+
+            update_summary(
+                current_session,
+                reflection["summary"],
+            )
+
+            save_extracted_memories(
+                reflection["memories"],
+            )
 
     create_session(conversation.id)
 

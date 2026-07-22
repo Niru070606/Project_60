@@ -7,9 +7,11 @@ from database import db
 
 from routes.chat import chat_bp
 from routes.personality import personality_bp
+from routes.memory import memory_bp
 from models.conversation import Conversation
 from models.chat_session import ChatSession
 from models.message import Message
+from models.memory import Memory
 
 app = Flask(__name__)
 
@@ -37,6 +39,7 @@ CORS(
 # Route
 app.register_blueprint(chat_bp)
 app.register_blueprint(personality_bp)
+app.register_blueprint(memory_bp)
 
 @app.route("/")
 def home():

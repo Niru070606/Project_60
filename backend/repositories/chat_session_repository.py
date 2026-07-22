@@ -20,3 +20,8 @@ def get_latest_session(conversation_id: int):
         .order_by(ChatSession.id.desc())
         .first()
     )
+
+def update_summary(session: ChatSession,summary: str,):
+    session.summary = summary
+
+    db.session.commit()
