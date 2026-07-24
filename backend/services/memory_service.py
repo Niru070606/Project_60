@@ -2,9 +2,10 @@ from repositories.conversation_repository import get_or_create_conversation
 from repositories.memory_repository import (
     save_memory,
     get_memories,
-    find_memory,
+    find_similar_memory,
     update_importance,
-    delete_memory
+    delete_memory,
+    
 )
 
 def create_memory(
@@ -22,7 +23,7 @@ def create_memory(
     )
 
 
-def load_memories(limit: int = 20):
+def load_memories(limit: int = 10):
 
     conversation = get_or_create_conversation()
 
@@ -42,7 +43,7 @@ def save_extracted_memories(memories):
         if confidence < 80:
             continue
 
-        existing = find_memory(
+        existing = find_similar_memory(
             conversation.id,
             memory["memory"],
         )
@@ -65,3 +66,19 @@ def save_extracted_memories(memories):
 
 def remove_memory(memory):
     delete_memory(memory)
+
+def reinforce_memories(memories, amount=1):
+
+    for memory in memories:
+
+        new_importance = min(
+            memory.importance + amount,
+            100
+        )
+
+        update_importance(
+            memory,
+            new_importance
+        )
+
+

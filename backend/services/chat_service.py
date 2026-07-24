@@ -2,9 +2,9 @@ from google import genai
 from google.genai import types
 
 from config import Config
+
 from services.personality_service import get_personality
 from services.prompt_builder import build_system_prompt
-
 from services.memory_service import load_memories
 
 
@@ -16,7 +16,7 @@ chat = None
 
 
 def start_chat():
-    """Starts a new Gemini chat using the current personality."""
+    """Starts a new Gemini chat."""
 
     global chat
 
@@ -38,7 +38,6 @@ def start_chat():
 
 
 def send_message(message: str) -> str:
-    """Sends a message to the active chat."""
 
     global chat
 
@@ -51,6 +50,5 @@ def send_message(message: str) -> str:
 
 
 def reset_chat():
-    """Starts a fresh conversation."""
 
     start_chat()

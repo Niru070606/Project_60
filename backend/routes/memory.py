@@ -18,6 +18,7 @@ def get_all_memories():
             "memory": memory.memory,
             "category": memory.category,
             "importance": memory.importance,
+            "retrieval_count": memory.retrieval_count,
             "created_at": memory.created_at.strftime("%B %d, %Y"),
         }
         for memory in memories

@@ -12,10 +12,12 @@ def build_brain(user_message: str):
 
     history = get_recent_messages()
 
-    prompt = build_system_prompt(
+    system_prompt = build_system_prompt(
         personality=personality,
         memories=memories,
-        history=history,
     )
 
-    return prompt
+    return {
+        "system_prompt": system_prompt,
+        "history": history,
+    }
