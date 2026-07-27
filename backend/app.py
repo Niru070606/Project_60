@@ -12,6 +12,7 @@ from models.conversation import Conversation
 from models.chat_session import ChatSession
 from models.message import Message
 from models.memory import Memory
+from models.relationship import Relationship
 
 app = Flask(__name__)
 

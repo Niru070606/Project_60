@@ -57,10 +57,17 @@ def find_memory(
         .first()
     )
 
-def update_importance(
+def update_memory(
     memory: Memory,
+    new_text: str,
     importance: int,
 ):
+
+    # Only replace the memory if the new version
+    # contains more information.
+    if len(new_text) > len(memory.memory):
+        memory.memory = new_text
+
     memory.importance = max(
         memory.importance,
         importance,

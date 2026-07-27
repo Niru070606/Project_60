@@ -1,6 +1,5 @@
 from flask import Blueprint, request, jsonify
 
-from services.chat_service import reset_chat
 
 from services.conversation_service import (
     chat,
@@ -37,7 +36,6 @@ def send_chat():
 def reset():
 
     start_new_session()
-    reset_chat()
 
     return jsonify({
         "success": True

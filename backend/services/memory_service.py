@@ -3,7 +3,7 @@ from repositories.memory_repository import (
     save_memory,
     get_memories,
     find_similar_memory,
-    update_importance,
+    update_memory,
     delete_memory,
     
 )
@@ -50,8 +50,9 @@ def save_extracted_memories(memories):
 
         if existing:
 
-            update_importance(
+            update_memory(
                 existing,
+                memory["memory"],
                 memory["importance"],
             )
 
