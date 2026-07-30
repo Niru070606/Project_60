@@ -10,6 +10,16 @@ from services.chat_service import send_message
 from services.session_summary_service import summarize_session
 from services.memory_service import save_extracted_memories
 
+from services.relationship_service import reinforce_relationship
+
+from services.relationship_reflection_service import (
+    reflect_relationship,
+)
+
+from services.relationship_service import (
+    apply_relationship_changes,
+)
+
 def chat(message: str) -> str:
 
     conversation = get_or_create_conversation()
@@ -32,6 +42,8 @@ def chat(message: str) -> str:
         sender="ai",
         message=reply,
     )
+
+    reinforce_relationship()
 
     return reply
 
@@ -57,6 +69,10 @@ def start_new_session():
             save_extracted_memories(
                 reflection["memories"],
             )
+
+            relationship_changes = reflect_relationship(messages)
+
+            apply_relationship_changes(relationship_changes)
 
     create_session(conversation.id)
 

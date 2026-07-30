@@ -1,3 +1,5 @@
+from difflib import SequenceMatcher
+
 from database import db
 from models.memory import Memory
 
@@ -55,13 +57,69 @@ def find_memory(
         .first()
     )
 
-def update_importance(
+def update_memory(
     memory: Memory,
+    new_text: str,
     importance: int,
 ):
+
+    # Only replace the memory if the new version
+    # contains more information.
+    if len(new_text) > len(memory.memory):
+        memory.memory = new_text
+
     memory.importance = max(
         memory.importance,
         importance,
+    )
+
+    db.session.commit()
+
+def increment_retrieval_count(
+    memory: Memory,
+):
+    memory.retrieval_count += 1
+
+    db.session.commit()
+
+def find_similar_memory(
+    conversation_id: int,
+    new_memory: str,
+    threshold: float = 0.85,
+):
+
+    memories = (
+        Memory.query
+        .filter_by(conversation_id=conversation_id)
+        .all()
+    )
+
+    best_match = None
+    best_score = 0
+
+    for memory in memories:
+
+        score = SequenceMatcher(
+            None,
+            memory.memory.lower(),
+            new_memory.lower(),
+        ).ratio()
+
+        if score > best_score:
+            best_score = score
+            best_match = memory
+
+    if best_score >= threshold:
+        return best_match
+
+    return None
+
+def delete_all_memories(conversation_id: int):
+
+    (
+        Memory.query
+        .filter_by(conversation_id=conversation_id)
+        .delete()
     )
 
     db.session.commit()

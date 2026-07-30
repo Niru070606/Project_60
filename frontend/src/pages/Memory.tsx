@@ -10,6 +10,7 @@ interface Memory {
   memory: string;
   category: string;
   importance: number;
+  retrieval_count: number;
 }
 
 export default function Memory() {

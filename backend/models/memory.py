@@ -41,3 +41,9 @@ class Memory(db.Model):
         server_default=db.func.now(),
         onupdate=db.func.now()
     )
+
+    retrieval_count = db.Column(
+        db.Integer,
+        nullable=False,
+        default=0
+)

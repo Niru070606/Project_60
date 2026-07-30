@@ -1,23 +1,126 @@
+import re
+
 from services.memory_service import load_memories
+from repositories.memory_repository import increment_retrieval_count
+
+RECALL_KEYWORDS = {
+    "remember",
+    "know",
+    "about",
+    "me",
+    "myself",
+}
 
 
-def search_memories(user_message: str):
+STOP_WORDS = {
+    "i",
+    "am",
+    "is",
+    "are",
+    "the",
+    "a",
+    "an",
+    "of",
+    "to",
+    "for",
+    "and",
+    "my",
+    "me",
+    "you",
+    "your",
+    "in",
+    "on",
+    "at",
+}
+
+
+def normalize(text: str) -> str:
+    """Lowercase and remove punctuation."""
+
+    text = text.lower()
+
+    text = re.sub(r"[^a-z0-9\s]", "", text)
+
+    return text
+
+
+def search_memories(user_message: str, limit: int = 5):
+    """
+    Search the most relevant memories using keyword matching.
+    Returns only the highest-ranked memories.
+    """
 
     memories = load_memories()
 
     if not memories:
         return []
 
-    user_message = user_message.lower()
+    normalized_query = normalize(user_message)
+    print("Original:", user_message)
+    print("Normalized:", normalized_query)
+    print("Recall Keywords:", RECALL_KEYWORDS)
 
-    relevant = []
+    query_words = set(normalized_query.split())
+
+    if (
+        "remember" in query_words
+        or (
+            "know" in query_words
+            and "me" in query_words
+        )
+        or (
+            "about" in query_words
+            and "me" in query_words
+        )
+    ):
+
+        print("🔥 RECALL MODE ACTIVATED")
+        memories.sort(
+            key=lambda m: m.importance,
+            reverse=True,
+        )
+        return memories[:limit]
+
+    words = {
+        word
+        for word in normalize(user_message).split()
+        if word not in STOP_WORDS
+    }
+
+    scored = []
 
     for memory in memories:
 
-        if any(
-            word in memory.memory.lower()
-            for word in user_message.split()
-        ):
-            relevant.append(memory)
+        memory_words = {
+            word
+            for word in normalize(memory.memory).split()
+            if word not in STOP_WORDS
+        }
 
-    return relevant
+        matches = len(words & memory_words)
+
+        if matches == 0:
+            continue
+
+        score = (
+            matches * 10
+        ) + memory.importance
+
+        scored.append(
+            (score, memory)
+        )
+
+    scored.sort(
+        key=lambda x: x[0],
+        reverse=True,
+    )
+
+    top_memories = [
+    memory
+    for _, memory in scored[:limit]
+    ]
+
+    for memory in top_memories:
+        increment_retrieval_count(memory)
+
+    return top_memories

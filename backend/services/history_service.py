@@ -5,7 +5,7 @@ from repositories.chat_session_repository import get_latest_session
 from repositories.message_repository import get_messages
 
 
-def get_recent_messages(limit=20):
+def get_recent_messages(limit=300):
     conversation = get_or_create_conversation()
 
     session = get_latest_session(conversation.id)

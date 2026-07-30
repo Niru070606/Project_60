@@ -3,6 +3,7 @@ interface Memory {
   memory: string;
   category: string;
   importance: number;
+  retrieval_count: number;
 }
 
 interface MemoryCardProps {
@@ -16,8 +17,9 @@ export default function MemoryCard({ memory, onDelete }: MemoryCardProps) {
       <h4>{memory.memory}</h4>
 
       <div className="memory-meta">
-        <span>{memory.category}</span>
-        <span>⭐ {memory.importance}</span>
+        <span>Category: {memory.category}</span>
+        <span>Importance: {memory.importance}</span>
+        <span>Used: {memory.retrieval_count} times</span>
       </div>
 
       <button
