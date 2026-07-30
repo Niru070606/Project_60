@@ -5,6 +5,7 @@ from repositories.memory_repository import (
     find_similar_memory,
     update_memory,
     delete_memory,
+    delete_all_memories
     
 )
 
@@ -77,9 +78,23 @@ def reinforce_memories(memories, amount=1):
             100
         )
 
-        update_importance(
+        update_memory(
             memory,
-            new_importance
+            memory.memory,
+            new_importance,
+            )
+
+def replace_memories(memories):
+
+    conversation = get_or_create_conversation()
+
+    delete_all_memories(conversation.id)
+
+    for memory in memories:
+
+        save_memory(
+            conversation_id=conversation.id,
+            memory=memory["memory"],
+            category=memory["category"],
+            importance=memory["importance"],
         )
-
-

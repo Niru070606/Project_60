@@ -5,18 +5,26 @@ def build_memory_prompt(memories):
 
     prompt = """
 =========================
-WHAT YOU KNOW ABOUT THE USER
+LONG-TERM MEMORY
 =========================
 
-The following are long-term memories about the user.
+These are verified long-term memories about the user.
 
-These memories are facts you remember.
+Treat every memory below as factual unless the user explicitly corrects it.
 
-They DO NOT change your personality.
+When the user asks:
+- what you know about them,
+- what you remember,
+- who they are,
+- or asks about their preferences,
 
-Use them naturally during conversation.
+ALWAYS answer using these memories.
 
-Do not list them unless the user asks what you remember.
+Do NOT say "I don't remember" if the answer exists below.
+
+Use these memories naturally in conversation.
+
+Verified memories:
 
 """
 

@@ -113,3 +113,13 @@ def find_similar_memory(
         return best_match
 
     return None
+
+def delete_all_memories(conversation_id: int):
+
+    (
+        Memory.query
+        .filter_by(conversation_id=conversation_id)
+        .delete()
+    )
+
+    db.session.commit()

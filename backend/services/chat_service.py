@@ -14,7 +14,9 @@ def send_message(message: str) -> str:
 
     brain = build_brain(message)
 
-    history = brain["history"]
+    print("Intent:", brain.intent)
+
+    history = brain.history
 
     contents = history
 
@@ -23,10 +25,14 @@ def send_message(message: str) -> str:
 
     contents += f"user: {message}"
 
+    # print("\n================ SYSTEM PROMPT ================\n")
+    # print(brain["system_prompt"])
+    # print("\n==============================================\n")
+
     response = client.models.generate_content(
         model="gemini-2.5-flash",
         config=types.GenerateContentConfig(
-            system_instruction=brain["system_prompt"],
+            system_instruction=brain.system_prompt,
         ),
         contents=contents,
     )

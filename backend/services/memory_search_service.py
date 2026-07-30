@@ -3,6 +3,14 @@ import re
 from services.memory_service import load_memories
 from repositories.memory_repository import increment_retrieval_count
 
+RECALL_KEYWORDS = {
+    "remember",
+    "know",
+    "about",
+    "me",
+    "myself",
+}
+
 
 STOP_WORDS = {
     "i",
@@ -46,6 +54,32 @@ def search_memories(user_message: str, limit: int = 5):
 
     if not memories:
         return []
+
+    normalized_query = normalize(user_message)
+    print("Original:", user_message)
+    print("Normalized:", normalized_query)
+    print("Recall Keywords:", RECALL_KEYWORDS)
+
+    query_words = set(normalized_query.split())
+
+    if (
+        "remember" in query_words
+        or (
+            "know" in query_words
+            and "me" in query_words
+        )
+        or (
+            "about" in query_words
+            and "me" in query_words
+        )
+    ):
+
+        print("🔥 RECALL MODE ACTIVATED")
+        memories.sort(
+            key=lambda m: m.importance,
+            reverse=True,
+        )
+        return memories[:limit]
 
     words = {
         word

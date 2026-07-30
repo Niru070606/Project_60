@@ -1,9 +1,9 @@
 from services.history_service import get_recent_messages
 
 
-def build_history(limit: int = 30):
+def build_history(limit: int = 10):
 
-    messages = get_recent_messages(limit)
+    messages = get_recent_messages(limit=limit)
 
     history = []
 
