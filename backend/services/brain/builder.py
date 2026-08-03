@@ -1,4 +1,5 @@
 from services.brain.context import BrainContext
+from services.debug.brain_debugger import debug_brain
 
 from services.brain.identity import build_identity
 from services.brain.relationship import build_relationship
@@ -6,6 +7,13 @@ from services.brain.memory import build_memory
 from services.brain.history import build_history
 from services.brain.rules import build_rules
 from services.brain.intent import detect_intent
+from services.brain.thought_engine import create_thought_plan
+
+from services.brain.behavior_engine import create_behavior
+from services.prompts.thought_prompt import build_thought_prompt
+
+from services.prompts.prompt_composer import compose_prompt
+from services.prompts.behavior_prompt import build_behavior_prompt
 
 from services.brain.context_manager import (
     should_load_identity,
@@ -20,17 +28,30 @@ from services.brain.context_budget import (
     get_history_limit,
 )
 
+
+
 def build_brain(user_message):
 
     brain = BrainContext()
 
     brain.intent = detect_intent(user_message)
 
+    brain.thought = create_thought_plan(user_message)
+    brain.thought_prompt = build_thought_prompt(
+        brain.thought
+    )
+
+    brain.behavior = create_behavior(
+        brain.thought
+    )
+    brain.behavior_prompt = build_behavior_prompt(
+        brain.behavior
+    )
+
     memory_limit = get_memory_limit(brain.intent)
     history_limit = get_history_limit(brain.intent)
 
-    print("Memory Limit:", memory_limit)
-    print("History Limit:", history_limit)
+    
 
     if should_load_identity(brain.intent):
         brain.identity = build_identity()
@@ -52,29 +73,11 @@ def build_brain(user_message):
             limit=history_limit,
             )
 
-    sections = []
+    brain.system_prompt = compose_prompt(brain)
 
-    if brain.identity:
-        sections.append(brain.identity)
 
-    if brain.relationship:
-        sections.append(brain.relationship)
+    debug_brain(brain)
 
-    if brain.memory:
-        sections.append(brain.memory)
-
-    if brain.rules:
-        sections.append(brain.rules)
-
-    brain.system_prompt = "\n\n".join(sections)
-
-    # print("========== BRAIN ==========")
-    # print("Intent:", brain.intent)
-    # print("Identity:", bool(brain.identity))
-    # print("Relationship:", bool(brain.relationship))
-    # print("Memory:", bool(brain.memory))
-    # print("Rules:", bool(brain.rules))
-    # print("History:", bool(brain.history))
-    # print("===========================")
+    
 
     return brain
