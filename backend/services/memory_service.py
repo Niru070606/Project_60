@@ -9,19 +9,51 @@ from repositories.memory_repository import (
     
 )
 
+from services.memory.embedding_service import (
+    create_and_store_embedding,
+)
+
+from repositories.transaction_repository import (
+    flush,
+    commit,
+    rollback,
+)
+
 def create_memory(
     memory: str,
     category: str,
     importance: int,
-):
+    ):
+    
     conversation = get_or_create_conversation()
 
-    return save_memory(
-        conversation_id=conversation.id,
-        memory=memory,
-        category=category,
-        importance=importance,
-    )
+    try:
+
+        memory_record = save_memory(
+            conversation_id=conversation.id,
+            memory=memory,
+            category=category,
+            importance=importance,
+        )
+        
+        flush()
+
+        create_and_store_embedding(
+            memory_record.id,
+            memory,
+        )
+
+        commit()
+
+        return memory_record
+
+    except Exception:
+
+        rollback()
+
+        raise
+
+
 
 
 def load_memories(limit: int = 10):
@@ -44,6 +76,8 @@ def save_extracted_memories(memories):
         if confidence < 80:
             continue
 
+        conversation = get_or_create_conversation()
+
         existing = find_similar_memory(
             conversation.id,
             memory["memory"],
@@ -59,8 +93,7 @@ def save_extracted_memories(memories):
 
         else:
 
-            save_memory(
-                conversation_id=conversation.id,
+            create_memory(
                 memory=memory["memory"],
                 category=memory["category"],
                 importance=memory["importance"],

@@ -115,12 +115,19 @@ def search_memories(user_message: str, limit: int = 5):
         reverse=True,
     )
 
-    top_memories = [
-    memory
-    for _, memory in scored[:limit]
-    ]
+    results = []
 
-    for memory in top_memories:
-        increment_retrieval_count(memory)
+    for score, memory in scored[:limit]:
 
-    return top_memories
+        increment_retrieval_count(
+            memory
+        )
+
+        results.append(
+            (
+                memory,
+                score,
+            )
+        )
+
+    return results
