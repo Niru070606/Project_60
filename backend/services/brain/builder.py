@@ -76,7 +76,7 @@ def build_brain(user_message):
     brain.system_prompt = compose_prompt(brain)
 
 
-    debug_brain(brain)
+    # debug_brain(brain)
 
     
 

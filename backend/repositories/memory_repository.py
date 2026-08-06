@@ -18,7 +18,6 @@ def save_memory(
     )
 
     db.session.add(mem)
-    db.session.commit()
 
     return mem
 
@@ -123,3 +122,13 @@ def delete_all_memories(conversation_id: int):
     )
 
     db.session.commit()
+
+def get_memory_by_id(
+    memory_id: int,
+):
+
+    return (
+        Memory.query
+        .filter_by(id=memory_id)
+        .first()
+    )
