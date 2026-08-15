@@ -132,3 +132,18 @@ def get_memory_by_id(
         .filter_by(id=memory_id)
         .first()
     )
+
+def get_unreflected_memories():
+
+    return (
+        Memory.query
+        .filter_by(reflected=False)
+        .all()
+    )
+
+def mark_reflected(memories):
+
+    for memory in memories:
+        memory.reflected = True
+
+    db.session.commit()

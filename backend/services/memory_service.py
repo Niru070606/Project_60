@@ -67,21 +67,34 @@ def load_memories(limit: int = 10):
 
 def save_extracted_memories(memories):
 
+    print("\n===== REFLECTION MEMORIES RECEIVED =====")
+    print(memories)
+    print("========================================")
+
+
     conversation = get_or_create_conversation()
+
+    saved_memories = []
 
     for memory in memories:
 
-        confidence = memory.get("confidence", 100)
+        confidence = memory.get(
+            "confidence",
+            100
+        )
 
         if confidence < 80:
             continue
-
-        conversation = get_or_create_conversation()
 
         existing = find_similar_memory(
             conversation.id,
             memory["memory"],
         )
+
+        print("===== SIMILAR MEMORY CHECK =====")
+        print("New:", memory["memory"])
+        print("Existing:", existing)
+        print("================================")
 
         if existing:
 
@@ -91,13 +104,25 @@ def save_extracted_memories(memories):
                 memory["importance"],
             )
 
+            saved_memories.append(
+                existing
+            )
+
         else:
 
-            create_memory(
+            print("🔥 CREATING NEW MEMORY:", memory["memory"])
+
+            memory_record = create_memory(
                 memory=memory["memory"],
                 category=memory["category"],
                 importance=memory["importance"],
             )
+
+            saved_memories.append(
+                memory_record
+            )
+
+    return saved_memories
 
 def remove_memory(memory):
     delete_memory(memory)
@@ -131,3 +156,18 @@ def replace_memories(memories):
             category=memory["category"],
             importance=memory["importance"],
         )
+
+def create_missing_embedding(memory):
+    from repositories.memory_embedding_repository import (
+        get_embedding_by_memory_id,
+    )
+
+    existing = get_embedding_by_memory_id(memory.id)
+
+    if existing:
+        return existing
+
+    return create_and_store_embedding(
+        memory.id,
+        memory.memory,
+    )

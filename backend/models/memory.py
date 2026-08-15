@@ -46,4 +46,10 @@ class Memory(db.Model):
         db.Integer,
         nullable=False,
         default=0
-)
+    )
+
+    reflected = db.Column(
+        db.Boolean,
+        nullable=False,
+        default=False,
+    )

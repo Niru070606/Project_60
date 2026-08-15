@@ -15,23 +15,27 @@ def hybrid_search(
     keyword_results = search_memories(
         user_message,
         limit=limit,
-    )
+    ) or []
 
     semantic_results = semantic_search(
         user_message,
         limit=limit,
-    )
+    ) or []
 
     combined = {}
 
-    for memory, score in keyword_results:
+    # Keyword search returns Memory objects.
+    for memory in keyword_results:
+
+        keyword_score = memory.importance
 
         combined[memory.id] = {
             "memory": memory,
-            "keyword_score": score,
+            "keyword_score": keyword_score,
             "semantic_score": 0.0,
         }
 
+    # Semantic search returns (Memory, similarity_score).
     for memory, score in semantic_results:
 
         if memory.id not in combined:
