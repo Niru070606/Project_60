@@ -1,3 +1,7 @@
+from services.reflection.reflection_scheduler import (
+    process_reflection,
+)
+
 from repositories.conversation_repository import get_or_create_conversation
 from repositories.chat_session_repository import (
     create_session,
@@ -24,10 +28,14 @@ def chat(message: str) -> str:
 
     conversation = get_or_create_conversation()
 
-    session = get_latest_session(conversation.id)
+    session = get_latest_session(
+        conversation.id
+    )
 
     if session is None:
-        session = create_session(conversation.id)
+        session = create_session(
+            conversation.id
+        )
 
     save_message(
         chat_session_id=session.id,
@@ -35,7 +43,9 @@ def chat(message: str) -> str:
         message=message,
     )
 
-    reply = send_message(message)
+    reply = send_message(
+        message
+    )
 
     save_message(
         chat_session_id=session.id,
@@ -44,6 +54,22 @@ def chat(message: str) -> str:
     )
 
     reinforce_relationship()
+
+    messages = get_messages(
+        session.id
+    )
+
+    user_message_count = sum(
+        1
+        for msg in messages
+        if msg.sender == "user"
+    )
+
+    print("User message count:", user_message_count)
+
+    process_reflection(
+        user_message_count
+    )
 
     return reply
 

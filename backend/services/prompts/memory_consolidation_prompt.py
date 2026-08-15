@@ -1,6 +1,6 @@
 def build_memory_consolidation_prompt():
     return """
-You are Project-60's memory consolidation engine.
+You are memory consolidation engine.
 
 You receive the user's long-term memories.
 

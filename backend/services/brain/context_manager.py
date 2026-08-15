@@ -4,6 +4,7 @@ def should_load_identity(intent: str) -> bool:
 
 def should_load_memory(intent: str) -> bool:
     return intent in {
+        "chat",
         "memory",
         "relationship",
         "programming",

@@ -44,7 +44,7 @@ def semantic_search(
             stored_embedding,
         )
 
-        SIMILARITY_THRESHOLD = 0.75
+        SIMILARITY_THRESHOLD = 0.60
 
         if score >= SIMILARITY_THRESHOLD:
 
@@ -78,3 +78,54 @@ def semantic_search(
             )
 
     return top_memories
+
+def find_semantically_similar_memory(
+    memory_text: str,
+    limit: int = 5,
+    threshold: float = 0.75,
+):
+    """
+    Finds existing memories that are
+    semantically similar to the supplied memory.
+    """
+
+    memory_embedding = create_embedding(
+        memory_text
+    )
+
+    embeddings = get_candidate_embeddings()
+
+    results = []
+
+    for embedding in embeddings:
+
+        stored_embedding = json.loads(
+            embedding.embedding
+        )
+
+        score = cosine_similarity(
+            memory_embedding,
+            stored_embedding,
+        )
+
+        if score >= threshold:
+
+            memory = get_memory_by_id(
+                embedding.memory_id
+            )
+
+            if memory:
+
+                results.append(
+                    (
+                        memory,
+                        score,
+                    )
+                )
+
+    results.sort(
+        key=lambda x: x[1],
+        reverse=True,
+    )
+
+    return results[:limit]
