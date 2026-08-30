@@ -13,6 +13,8 @@ from models.chat_session import ChatSession
 from models.message import Message
 from models.memory import Memory
 from models.relationship import Relationship
+from models.entity import Entity
+from models.memory_entity import MemoryEntity
 
 app = Flask(__name__)
 
