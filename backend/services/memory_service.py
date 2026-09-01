@@ -2,11 +2,12 @@ from repositories.conversation_repository import get_or_create_conversation
 from repositories.memory_repository import (
     save_memory,
     get_memories,
-    find_similar_memory,
     update_memory,
     delete_memory,
     delete_all_memories
-    
+)
+from services.memory.memory_deduplication import (
+    find_semantic_duplicate,
 )
 
 from services.memory.embedding_service import (
@@ -17,6 +18,23 @@ from repositories.transaction_repository import (
     flush,
     commit,
     rollback,
+)
+
+from services.memory.entity_resolver import (
+    resolve_entities,
+)
+
+from services.memory.entity_interpreter import (
+    interpret_entities,
+)
+from services.memory.entity_candidate_merger import (
+    merge_entity_candidates,
+)
+from services.memory_entity_service import (
+    link_memory_to_resolved_entities,
+)
+from services.memory.entity_candidates import (
+    extract_entity_candidates
 )
 
 def create_memory(
@@ -37,6 +55,32 @@ def create_memory(
         )
         
         flush()
+
+        candidates = extract_entity_candidates(
+            memory
+        )
+        print("candidates")
+        print(candidates)
+
+        interpreted = interpret_entities(
+            memory,
+            candidates
+        )
+        print("interpreted")
+        print(interpreted)
+
+        merged = merge_entity_candidates(
+            interpreted
+        )
+
+        resolved = resolve_entities(
+            merged
+        )
+
+        link_memory_to_resolved_entities(
+            memory_id=memory_record.id,
+            entities=resolved,
+        )
 
         create_and_store_embedding(
             memory_record.id,
@@ -86,7 +130,7 @@ def save_extracted_memories(memories):
         if confidence < 80:
             continue
 
-        existing = find_similar_memory(
+        existing = find_semantic_duplicate(
             conversation.id,
             memory["memory"],
         )

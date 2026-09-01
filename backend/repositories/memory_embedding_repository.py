@@ -1,5 +1,6 @@
 from database import db
 from models.memory_embedding import MemoryEmbedding
+from models.memory import Memory
 
 
 def save_embedding(
@@ -34,6 +35,20 @@ def get_all_embeddings():
         .all()
     )
 
+def get_embeddings_by_conversation(
+    conversation_id: int,
+):
+    return (
+        MemoryEmbedding.query
+        .join(
+            Memory,
+            Memory.id == MemoryEmbedding.memory_id
+        )
+        .filter(
+            Memory.conversation_id == conversation_id
+        )
+        .all()
+    )
 
 def get_embedding_by_memory_id(
     memory_id: int,
