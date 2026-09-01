@@ -2,7 +2,7 @@ from services.reflection.reflection_service import (
     run_reflection,
 )
 
-REFLECTION_INTERVAL = 5
+REFLECTION_INTERVAL = 15
 
 
 def should_reflect(

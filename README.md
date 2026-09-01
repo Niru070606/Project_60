@@ -1,10 +1,10 @@
 Directory structure:
 └── niru070606-project_60/
-    ├── README.md
     ├── backend/
     │   ├── app.py
     │   ├── config.py
     │   ├── database.py
+    │   ├── repair_memory_embeddings.py
     │   ├── requirements.txt
     │   ├── migrations/
     │   │   ├── README
@@ -12,25 +12,35 @@ Directory structure:
     │   │   ├── env.py
     │   │   ├── script.py.mako
     │   │   └── versions/
+    │   │       ├── 104387c596e4_create_memory_embeddings_table.py
     │   │       ├── 1a6ca2dfc57d_add_retrieval_count_to_memories.py
     │   │       ├── 1bcbe41c2c81_initial_schema.py
     │   │       ├── 341d2475fcb8_add_memory_table_and_session_summary.py
-    │   │       └── 8d794f3f6ec2_add_relationship_table.py
+    │   │       ├── 694bbacfbbdd_add_entities_table.py
+    │   │       ├── 8884d2169438_add_memory_entity_uniqueness.py
+    │   │       ├── 8d794f3f6ec2_add_relationship_table.py
+    │   │       └── 9010a32eb16d_add_reflected_column_to_memories.py
     │   ├── models/
     │   │   ├── __init__.py
     │   │   ├── chat_session.py
     │   │   ├── conversation.py
+    │   │   ├── entity.py
     │   │   ├── memory.py
-    │   │   ├── memory_embedings.py
+    │   │   ├── memory_embedding.py
+    │   │   ├── memory_entity.py
     │   │   ├── message.py
     │   │   └── relationship.py
     │   ├── repositories/
     │   │   ├── __init__.py
     │   │   ├── chat_session_repository.py
     │   │   ├── conversation_repository.py
+    │   │   ├── entity_repository.py
+    │   │   ├── memory_embedding_repository.py
+    │   │   ├── memory_entity_repository.py
     │   │   ├── memory_repository.py
     │   │   ├── message_repository.py
-    │   │   └── relationship_repository.py
+    │   │   ├── relationship_repository.py
+    │   │   └── transaction_repository.py
     │   ├── routes/
     │   │   ├── __init__.py
     │   │   ├── chat.py
@@ -42,8 +52,8 @@ Directory structure:
     │   │   ├── conversation_service.py
     │   │   ├── history_service.py
     │   │   ├── memory_consolidation_service.py
+    │   │   ├── memory_entity_service.py
     │   │   ├── memory_retriever.py
-    │   │   ├── memory_search_service.py
     │   │   ├── memory_service.py
     │   │   ├── personality_service.py
     │   │   ├── relationship_reflection_service.py
@@ -66,17 +76,42 @@ Directory structure:
     │   │   │   └── thought_engine.py
     │   │   ├── debug/
     │   │   │   └── brain_debugger.py
-    │   │   └── prompts/
-    │   │       ├── behavior_prompt.py
-    │   │       ├── memory_consolidation_prompt.py
-    │   │       ├── memory_prompt.py
-    │   │       ├── personality_prompt.py
-    │   │       ├── prompt_composer.py
-    │   │       ├── prompt_layouts.py
-    │   │       ├── relationship_prompt.py
-    │   │       ├── relationship_reflection_prompt.py
-    │   │       ├── role_prompt.py
-    │   │       └── thought_prompt.py
+    │   │   ├── memory/
+    │   │   │   ├── embedding_service.py
+    │   │   │   ├── embedding_sync.py
+    │   │   │   ├── entity_candidate_merger.py
+    │   │   │   ├── entity_candidates.py
+    │   │   │   ├── entity_extractor.py
+    │   │   │   ├── entity_interpreter.py
+    │   │   │   ├── entity_normalizer.py
+    │   │   │   ├── entity_resolver.py
+    │   │   │   ├── hybrid_search.py
+    │   │   │   ├── keyword_search.py
+    │   │   │   ├── memory_consolidation.py
+    │   │   │   ├── memory_deduplication.py
+    │   │   │   ├── search_engine.py
+    │   │   │   ├── semantic_search.py
+    │   │   │   ├── similarity.py
+    │   │   │   ├── vector_index.py
+    │   │   │   └── working_memory.py
+    │   │   ├── prompts/
+    │   │   │   ├── behavior_prompt.py
+    │   │   │   ├── memory_consolidation_prompt.py
+    │   │   │   ├── memory_prompt.py
+    │   │   │   ├── personality_prompt.py
+    │   │   │   ├── prompt_composer.py
+    │   │   │   ├── prompt_layouts.py
+    │   │   │   ├── reflection_prompt.py
+    │   │   │   ├── relationship_prompt.py
+    │   │   │   ├── relationship_reflection_prompt.py
+    │   │   │   ├── role_prompt.py
+    │   │   │   └── thought_prompt.py
+    │   │   └── reflection/
+    │   │       ├── memory_consolidator.py
+    │   │       ├── reflection_engine.py
+    │   │       ├── reflection_scheduler.py
+    │   │       ├── reflection_service.py
+    │   │       └── reflection_validator.py
     │   └── utils/
     │       └── __init__.py
     └── frontend/
@@ -183,44 +218,6 @@ Directory structure:
 Files Content:
 
 ================================================
-FILE: README.md
-================================================
-# React + TypeScript + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
-
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
-
-
-
-================================================
 FILE: backend/app.py
 ================================================
 from flask import Flask, jsonify
@@ -238,6 +235,8 @@ from models.chat_session import ChatSession
 from models.message import Message
 from models.memory import Memory
 from models.relationship import Relationship
+from models.entity import Entity
+from models.memory_entity import MemoryEntity
 
 app = Flask(__name__)
 
@@ -293,6 +292,51 @@ FILE: backend/database.py
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
+
+
+================================================
+FILE: backend/repair_memory_embeddings.py
+================================================
+from app import app
+
+from services.memory_service import create_missing_embedding
+from repositories.memory_repository import get_memories
+from repositories.memory_embedding_repository import (
+    get_embedding_by_memory_id,
+)
+from repositories.conversation_repository import (
+    get_or_create_conversation,
+)
+
+with app.app_context():
+
+    conversation = get_or_create_conversation()
+
+    memories = get_memories(
+        conversation.id
+    )
+
+    for memory in memories:
+
+        embedding = get_embedding_by_memory_id(
+            memory.id
+        )
+
+        if embedding:
+            continue
+
+        print(
+            "🔥 Missing embedding:",
+            memory.id,
+            memory.memory
+        )
+
+        create_missing_embedding(memory)
+
+        print(
+            "✅ Embedding created:",
+            memory.id
+        )
 
 
 ================================================
@@ -514,6 +558,49 @@ def downgrade():
 
 
 ================================================
+FILE: backend/migrations/versions/104387c596e4_create_memory_embeddings_table.py
+================================================
+"""Create memory embeddings table
+
+Revision ID: 104387c596e4
+Revises: 8d794f3f6ec2
+Create Date: 2026-08-05 17:10:40.893307
+
+"""
+from alembic import op
+import sqlalchemy as sa
+
+
+# revision identifiers, used by Alembic.
+revision = '104387c596e4'
+down_revision = '8d794f3f6ec2'
+branch_labels = None
+depends_on = None
+
+
+def upgrade():
+    # ### commands auto generated by Alembic - please adjust! ###
+    op.create_table('memory_embeddings',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('memory_id', sa.Integer(), nullable=False),
+    sa.Column('model', sa.String(length=100), nullable=False),
+    sa.Column('embedding', sa.Text(), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=True),
+    sa.ForeignKeyConstraint(['memory_id'], ['memories.id'], ),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('memory_id')
+    )
+    # ### end Alembic commands ###
+
+
+def downgrade():
+    # ### commands auto generated by Alembic - please adjust! ###
+    op.drop_table('memory_embeddings')
+    # ### end Alembic commands ###
+
+
+
+================================================
 FILE: backend/migrations/versions/1a6ca2dfc57d_add_retrieval_count_to_memories.py
 ================================================
 """Add retrieval_count to memories
@@ -658,6 +745,88 @@ def downgrade():
 
 
 ================================================
+FILE: backend/migrations/versions/694bbacfbbdd_add_entities_table.py
+================================================
+"""add entities table
+
+Revision ID: 694bbacfbbdd
+Revises: 9010a32eb16d
+Create Date: 2026-08-16 20:03:05.266857
+
+"""
+from alembic import op
+import sqlalchemy as sa
+
+
+# revision identifiers, used by Alembic.
+revision = '694bbacfbbdd'
+down_revision = '9010a32eb16d'
+branch_labels = None
+depends_on = None
+
+
+def upgrade():
+    # ### commands auto generated by Alembic - please adjust! ###
+    op.create_table('entities',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('name', sa.String(length=255), nullable=False),
+    sa.Column('entity_type', sa.String(length=50), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=True),
+    sa.PrimaryKeyConstraint('id')
+    )
+    # ### end Alembic commands ###
+
+
+def downgrade():
+    # ### commands auto generated by Alembic - please adjust! ###
+    op.drop_table('entities')
+    # ### end Alembic commands ###
+
+
+
+================================================
+FILE: backend/migrations/versions/8884d2169438_add_memory_entity_uniqueness.py
+================================================
+"""add memory entity uniqueness
+
+Revision ID: 8884d2169438
+Revises: 694bbacfbbdd
+Create Date: 2026-08-17 21:04:02.641375
+
+"""
+from alembic import op
+import sqlalchemy as sa
+
+
+# revision identifiers, used by Alembic.
+revision = '8884d2169438'
+down_revision = '694bbacfbbdd'
+branch_labels = None
+depends_on = None
+
+
+def upgrade():
+    # ### commands auto generated by Alembic - please adjust! ###
+    op.create_table('memory_entities',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('memory_id', sa.Integer(), nullable=False),
+    sa.Column('entity_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['entity_id'], ['entities.id'], ),
+    sa.ForeignKeyConstraint(['memory_id'], ['memories.id'], ),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('memory_id', 'entity_id', name='uq_memory_entity')
+    )
+    # ### end Alembic commands ###
+
+
+def downgrade():
+    # ### commands auto generated by Alembic - please adjust! ###
+    op.drop_table('memory_entities')
+    # ### end Alembic commands ###
+
+
+
+================================================
 FILE: backend/migrations/versions/8d794f3f6ec2_add_relationship_table.py
 ================================================
 """add relationship table
@@ -699,6 +868,44 @@ def upgrade():
 def downgrade():
     # ### commands auto generated by Alembic - please adjust! ###
     op.drop_table('relationships')
+    # ### end Alembic commands ###
+
+
+
+================================================
+FILE: backend/migrations/versions/9010a32eb16d_add_reflected_column_to_memories.py
+================================================
+"""add reflected column to memories
+
+Revision ID: 9010a32eb16d
+Revises: 104387c596e4
+Create Date: 2026-08-07 22:40:47.902489
+
+"""
+from alembic import op
+import sqlalchemy as sa
+
+
+# revision identifiers, used by Alembic.
+revision = '9010a32eb16d'
+down_revision = '104387c596e4'
+branch_labels = None
+depends_on = None
+
+
+def upgrade():
+    # ### commands auto generated by Alembic - please adjust! ###
+    with op.batch_alter_table('memories', schema=None) as batch_op:
+        batch_op.add_column(sa.Column('reflected', sa.Boolean(), nullable=False))
+
+    # ### end Alembic commands ###
+
+
+def downgrade():
+    # ### commands auto generated by Alembic - please adjust! ###
+    with op.batch_alter_table('memories', schema=None) as batch_op:
+        batch_op.drop_column('reflected')
+
     # ### end Alembic commands ###
 
 
@@ -787,6 +994,36 @@ class Conversation(db.Model):
 
 
 ================================================
+FILE: backend/models/entity.py
+================================================
+from database import db
+
+
+class Entity(db.Model):
+    __tablename__ = "entities"
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    name = db.Column(
+        db.String(255),
+        nullable=False
+    )
+
+    entity_type = db.Column(
+        db.String(50),
+        nullable=False
+    )
+
+    created_at = db.Column(
+        db.DateTime,
+        server_default=db.func.now()
+    )
+
+
+================================================
 FILE: backend/models/memory.py
 ================================================
 from database import db
@@ -837,11 +1074,17 @@ class Memory(db.Model):
         db.Integer,
         nullable=False,
         default=0
-)
+    )
+
+    reflected = db.Column(
+        db.Boolean,
+        nullable=False,
+        default=False,
+    )
 
 
 ================================================
-FILE: backend/models/memory_embedings.py
+FILE: backend/models/memory_embedding.py
 ================================================
 from database import db
 
@@ -874,6 +1117,53 @@ class MemoryEmbedding(db.Model):
     created_at = db.Column(
         db.DateTime,
         server_default=db.func.now()
+    )
+    
+
+
+================================================
+FILE: backend/models/memory_entity.py
+================================================
+from database import db
+
+
+class MemoryEntity(db.Model):
+
+    __tablename__ = "memory_entities"
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    memory_id = db.Column(
+        db.Integer,
+        db.ForeignKey("memories.id"),
+        nullable=False
+    )
+
+    entity_id = db.Column(
+        db.Integer,
+        db.ForeignKey("entities.id"),
+        nullable=False
+    )
+
+    memory = db.relationship(
+        "Memory",
+        backref="memory_entities",
+    )
+
+    entity = db.relationship(
+        "Entity",
+        backref="memory_entities",
+    )
+
+    __table_args__ = (
+        db.UniqueConstraint(
+            "memory_id",
+            "entity_id",
+            name="uq_memory_entity",
+        ),
     )
 
 
@@ -1037,6 +1327,232 @@ def delete_conversation(conversation: Conversation):
 
 
 ================================================
+FILE: backend/repositories/entity_repository.py
+================================================
+from models.entity import Entity
+from database import db
+
+
+def get_entities():
+    return Entity.query.all()
+
+
+def get_entity_by_id(entity_id: int):
+    return Entity.query.get(entity_id)
+
+
+def find_entity_by_name(
+    name: str,
+    entity_type: str | None = None,
+):
+
+    query = Entity.query.filter(
+        db.func.lower(Entity.name)
+        == name.lower()
+    )
+
+    if entity_type:
+        query = query.filter(
+            Entity.entity_type
+            == entity_type
+        )
+
+    return query.first()
+
+
+def create_entity(
+    name: str,
+    entity_type: str,
+):
+
+    entity = Entity(
+        name=name,
+        entity_type=entity_type,
+    )
+
+    db.session.add(entity)
+
+    return entity
+
+
+================================================
+FILE: backend/repositories/memory_embedding_repository.py
+================================================
+from database import db
+from models.memory_embedding import MemoryEmbedding
+from models.memory import Memory
+
+
+def save_embedding(
+    memory_id: int,
+    model: str,
+    embedding: str,
+):
+
+    memory_embedding = MemoryEmbedding(
+        memory_id=memory_id,
+        model=model,
+        embedding=embedding,
+    )
+
+    db.session.add(memory_embedding)
+
+    print(
+    "🔥 SAVING EMBEDDING:",
+    memory_id,
+    model,
+    len(embedding)
+    )
+    db.session.commit()
+
+    return memory_embedding
+
+
+def get_all_embeddings():
+
+    return (
+        MemoryEmbedding.query
+        .all()
+    )
+
+def get_embeddings_by_conversation(
+    conversation_id: int,
+):
+    return (
+        MemoryEmbedding.query
+        .join(
+            Memory,
+            Memory.id == MemoryEmbedding.memory_id
+        )
+        .filter(
+            Memory.conversation_id == conversation_id
+        )
+        .all()
+    )
+
+def get_embedding_by_memory_id(
+    memory_id: int,
+):
+    return (
+        MemoryEmbedding.query
+        .filter_by(
+            memory_id=memory_id
+        )
+        .first()
+    )
+
+
+def update_embedding(
+    memory_id: int,
+    model: str,
+    embedding: str,
+):
+
+    memory_embedding = get_embedding_by_memory_id(
+        memory_id
+    )
+
+    if memory_embedding is None:
+
+        return save_embedding(
+            memory_id=memory_id,
+            model=model,
+            embedding=embedding,
+        )
+
+    memory_embedding.model = model
+    memory_embedding.embedding = embedding
+
+    db.session.commit()
+
+    return memory_embedding
+
+
+================================================
+FILE: backend/repositories/memory_entity_repository.py
+================================================
+from models.memory_entity import MemoryEntity
+from database import db
+
+
+def create_memory_entity(
+    memory_id: int,
+    entity_id: int,
+):
+    association = MemoryEntity(
+        memory_id=memory_id,
+        entity_id=entity_id,
+    )
+
+    db.session.add(association)
+
+    return association
+
+
+def find_memory_entity(
+    memory_id: int,
+    entity_id: int,
+):
+    return MemoryEntity.query.filter_by(
+        memory_id=memory_id,
+        entity_id=entity_id,
+    ).first()
+
+
+def get_entities_for_memory(
+    memory_id: int,
+):
+    return (
+        MemoryEntity.query
+        .filter_by(
+            memory_id=memory_id
+        )
+        .all()
+    )
+
+
+def get_memories_for_entity(
+    entity_id: int,
+):
+    return (
+        MemoryEntity.query
+        .filter_by(
+            entity_id=entity_id
+        )
+        .all()
+    )
+
+
+def delete_memory_entity(
+    memory_id: int,
+    entity_id: int,
+):
+    association = find_memory_entity(
+        memory_id,
+        entity_id,
+    )
+
+    if association:
+        db.session.delete(
+            association
+        )
+
+    return association
+
+def get_memory_records_for_entity(
+    entity_id: int,
+):
+    links = get_memories_for_entity(
+        entity_id
+    )
+
+    return [
+        link.memory
+        for link in links
+    ]
+
+
+================================================
 FILE: backend/repositories/memory_repository.py
 ================================================
 from difflib import SequenceMatcher
@@ -1059,7 +1575,6 @@ def save_memory(
     )
 
     db.session.add(mem)
-    db.session.commit()
 
     return mem
 
@@ -1162,6 +1677,31 @@ def delete_all_memories(conversation_id: int):
         .filter_by(conversation_id=conversation_id)
         .delete()
     )
+
+    db.session.commit()
+
+def get_memory_by_id(
+    memory_id: int,
+):
+
+    return (
+        Memory.query
+        .filter_by(id=memory_id)
+        .first()
+    )
+
+def get_unreflected_memories():
+
+    return (
+        Memory.query
+        .filter_by(reflected=False)
+        .all()
+    )
+
+def mark_reflected(memories):
+
+    for memory in memories:
+        memory.reflected = True
 
     db.session.commit()
 
@@ -1268,6 +1808,24 @@ def update_relationship(
     db.session.commit()
 
     return relationship
+
+
+================================================
+FILE: backend/repositories/transaction_repository.py
+================================================
+from database import db
+
+
+def flush():
+    db.session.flush()
+
+
+def commit():
+    db.session.commit()
+
+
+def rollback():
+    db.session.rollback()
 
 
 ================================================
@@ -1530,6 +2088,10 @@ def send_message(message: str) -> str:
 ================================================
 FILE: backend/services/conversation_service.py
 ================================================
+from services.reflection.reflection_scheduler import (
+    process_reflection,
+)
+
 from repositories.conversation_repository import get_or_create_conversation
 from repositories.chat_session_repository import (
     create_session,
@@ -1556,10 +2118,14 @@ def chat(message: str) -> str:
 
     conversation = get_or_create_conversation()
 
-    session = get_latest_session(conversation.id)
+    session = get_latest_session(
+        conversation.id
+    )
 
     if session is None:
-        session = create_session(conversation.id)
+        session = create_session(
+            conversation.id
+        )
 
     save_message(
         chat_session_id=session.id,
@@ -1567,7 +2133,9 @@ def chat(message: str) -> str:
         message=message,
     )
 
-    reply = send_message(message)
+    reply = send_message(
+        message
+    )
 
     save_message(
         chat_session_id=session.id,
@@ -1576,6 +2144,22 @@ def chat(message: str) -> str:
     )
 
     reinforce_relationship()
+
+    messages = get_messages(
+        session.id
+    )
+
+    user_message_count = sum(
+        1
+        for msg in messages
+        if msg.sender == "user"
+    )
+
+    print("User message count:", user_message_count)
+
+    process_reflection(
+        user_message_count
+    )
 
     return reply
 
@@ -1682,6 +2266,124 @@ def consolidate_memories(memories):
 
 
 ================================================
+FILE: backend/services/memory_entity_service.py
+================================================
+from repositories.memory_entity_repository import (
+    create_memory_entity,
+    find_memory_entity,
+    get_entities_for_memory,
+    get_memories_for_entity,
+    get_memory_records_for_entity,
+)
+
+from repositories.transaction_repository import (
+    flush,
+    commit,
+    rollback,
+)
+
+
+def link_memory_to_entity(
+    memory_id: int,
+    entity_id: int,
+):
+
+    existing = find_memory_entity(
+        memory_id,
+        entity_id,
+    )
+
+    if existing:
+        return existing
+
+    try:
+
+        association = create_memory_entity(
+            memory_id,
+            entity_id,
+        )
+
+        flush()
+        commit()
+
+        return association
+
+    except Exception:
+
+        rollback()
+
+        raise
+
+def link_memory_to_entities(
+    memory_id: int,
+    entity_ids: list[int],
+):
+    links = []
+
+    for entity_id in entity_ids:
+
+        link = link_memory_to_entity(
+            memory_id,
+            entity_id,
+        )
+
+        links.append(link)
+
+    return links
+
+def get_memory_entities(
+    memory_id: int,
+):
+    return get_entities_for_memory(
+        memory_id
+    )
+
+def link_memory_to_resolved_entities(
+    memory_id: int,
+    entities,
+):
+    entity_ids = [
+        entity.id
+        for entity in entities
+    ]
+
+    return link_memory_to_entities(
+        memory_id,
+        entity_ids,
+    )
+
+def get_entity_memories(
+    entity_id: int,
+):
+    return get_memories_for_entity(
+        entity_id
+    )
+
+def get_entity_memory_records(
+    entity_id: int,
+):
+    return get_memory_records_for_entity(
+        entity_id
+    )
+
+def get_memories_for_entities(
+    entity_ids: list[int],
+):
+    memories = {}
+
+    for entity_id in entity_ids:
+
+        entity_memories = get_entity_memory_records(
+            entity_id
+        )
+
+        for memory in entity_memories:
+            memories[memory.id] = memory
+
+    return list(memories.values())
+
+
+================================================
 FILE: backend/services/memory_retriever.py
 ================================================
 from services.memory_service import load_memories
@@ -1764,163 +2466,108 @@ def retrieve_memories(user_message: str):
 
 
 ================================================
-FILE: backend/services/memory_search_service.py
-================================================
-import re
-
-from services.memory_service import load_memories
-from repositories.memory_repository import increment_retrieval_count
-
-RECALL_KEYWORDS = {
-    "remember",
-    "know",
-    "about",
-    "me",
-    "myself",
-}
-
-
-STOP_WORDS = {
-    "i",
-    "am",
-    "is",
-    "are",
-    "the",
-    "a",
-    "an",
-    "of",
-    "to",
-    "for",
-    "and",
-    "my",
-    "me",
-    "you",
-    "your",
-    "in",
-    "on",
-    "at",
-}
-
-
-def normalize(text: str) -> str:
-    """Lowercase and remove punctuation."""
-
-    text = text.lower()
-
-    text = re.sub(r"[^a-z0-9\s]", "", text)
-
-    return text
-
-
-def search_memories(user_message: str, limit: int = 5):
-    """
-    Search the most relevant memories using keyword matching.
-    Returns only the highest-ranked memories.
-    """
-
-    memories = load_memories()
-
-    if not memories:
-        return []
-
-    normalized_query = normalize(user_message)
-    print("Original:", user_message)
-    print("Normalized:", normalized_query)
-    print("Recall Keywords:", RECALL_KEYWORDS)
-
-    query_words = set(normalized_query.split())
-
-    if (
-        "remember" in query_words
-        or (
-            "know" in query_words
-            and "me" in query_words
-        )
-        or (
-            "about" in query_words
-            and "me" in query_words
-        )
-    ):
-
-        print("🔥 RECALL MODE ACTIVATED")
-        memories.sort(
-            key=lambda m: m.importance,
-            reverse=True,
-        )
-        return memories[:limit]
-
-    words = {
-        word
-        for word in normalize(user_message).split()
-        if word not in STOP_WORDS
-    }
-
-    scored = []
-
-    for memory in memories:
-
-        memory_words = {
-            word
-            for word in normalize(memory.memory).split()
-            if word not in STOP_WORDS
-        }
-
-        matches = len(words & memory_words)
-
-        if matches == 0:
-            continue
-
-        score = (
-            matches * 10
-        ) + memory.importance
-
-        scored.append(
-            (score, memory)
-        )
-
-    scored.sort(
-        key=lambda x: x[0],
-        reverse=True,
-    )
-
-    top_memories = [
-    memory
-    for _, memory in scored[:limit]
-    ]
-
-    for memory in top_memories:
-        increment_retrieval_count(memory)
-
-    return top_memories
-
-
-================================================
 FILE: backend/services/memory_service.py
 ================================================
 from repositories.conversation_repository import get_or_create_conversation
 from repositories.memory_repository import (
     save_memory,
     get_memories,
-    find_similar_memory,
     update_memory,
     delete_memory,
     delete_all_memories
-    
+)
+from services.memory.memory_deduplication import (
+    find_semantic_duplicate,
+)
+
+from services.memory.embedding_service import (
+    create_and_store_embedding,
+)
+
+from repositories.transaction_repository import (
+    flush,
+    commit,
+    rollback,
+)
+
+from services.memory.entity_resolver import (
+    resolve_entities,
+)
+
+from services.memory.entity_interpreter import (
+    interpret_entities,
+)
+from services.memory.entity_candidate_merger import (
+    merge_entity_candidates,
+)
+from services.memory_entity_service import (
+    link_memory_to_resolved_entities,
+)
+from services.memory.entity_candidates import (
+    extract_entity_candidates
 )
 
 def create_memory(
     memory: str,
     category: str,
     importance: int,
-):
+    ):
+    
     conversation = get_or_create_conversation()
 
-    return save_memory(
-        conversation_id=conversation.id,
-        memory=memory,
-        category=category,
-        importance=importance,
-    )
+    try:
+
+        memory_record = save_memory(
+            conversation_id=conversation.id,
+            memory=memory,
+            category=category,
+            importance=importance,
+        )
+        
+        flush()
+
+        candidates = extract_entity_candidates(
+            memory
+        )
+        print("candidates")
+        print(candidates)
+
+        interpreted = interpret_entities(
+            memory,
+            candidates
+        )
+        print("interpreted")
+        print(interpreted)
+
+        merged = merge_entity_candidates(
+            interpreted
+        )
+
+        resolved = resolve_entities(
+            merged
+        )
+
+        link_memory_to_resolved_entities(
+            memory_id=memory_record.id,
+            entities=resolved,
+        )
+
+        create_and_store_embedding(
+            memory_record.id,
+            memory,
+        )
+
+        commit()
+
+        return memory_record
+
+    except Exception:
+
+        rollback()
+
+        raise
+
+
 
 
 def load_memories(limit: int = 10):
@@ -1934,19 +2581,34 @@ def load_memories(limit: int = 10):
 
 def save_extracted_memories(memories):
 
+    print("\n===== REFLECTION MEMORIES RECEIVED =====")
+    print(memories)
+    print("========================================")
+
+
     conversation = get_or_create_conversation()
+
+    saved_memories = []
 
     for memory in memories:
 
-        confidence = memory.get("confidence", 100)
+        confidence = memory.get(
+            "confidence",
+            100
+        )
 
         if confidence < 80:
             continue
 
-        existing = find_similar_memory(
+        existing = find_semantic_duplicate(
             conversation.id,
             memory["memory"],
         )
+
+        print("===== SIMILAR MEMORY CHECK =====")
+        print("New:", memory["memory"])
+        print("Existing:", existing)
+        print("================================")
 
         if existing:
 
@@ -1956,14 +2618,25 @@ def save_extracted_memories(memories):
                 memory["importance"],
             )
 
+            saved_memories.append(
+                existing
+            )
+
         else:
 
-            save_memory(
-                conversation_id=conversation.id,
+            print("🔥 CREATING NEW MEMORY:", memory["memory"])
+
+            memory_record = create_memory(
                 memory=memory["memory"],
                 category=memory["category"],
                 importance=memory["importance"],
             )
+
+            saved_memories.append(
+                memory_record
+            )
+
+    return saved_memories
 
 def remove_memory(memory):
     delete_memory(memory)
@@ -1998,6 +2671,20 @@ def replace_memories(memories):
             importance=memory["importance"],
         )
 
+def create_missing_embedding(memory):
+    from repositories.memory_embedding_repository import (
+        get_embedding_by_memory_id,
+    )
+
+    existing = get_embedding_by_memory_id(memory.id)
+
+    if existing:
+        return existing
+
+    return create_and_store_embedding(
+        memory.id,
+        memory.memory,
+    )
 
 
 ================================================
@@ -2342,7 +3029,7 @@ def build_brain(user_message):
     brain.system_prompt = compose_prompt(brain)
 
 
-    debug_brain(brain)
+    # debug_brain(brain)
 
     
 
@@ -2432,6 +3119,7 @@ def should_load_identity(intent: str) -> bool:
 
 def should_load_memory(intent: str) -> bool:
     return intent in {
+        "chat",
         "memory",
         "relationship",
         "programming",
@@ -2563,13 +3251,13 @@ def detect_intent(message: str) -> str:
 ================================================
 FILE: backend/services/brain/memory.py
 ================================================
-from services.memory_search_service import search_memories
+from services.memory.search_engine import search
 from services.prompts.memory_prompt import build_memory_prompt
 
 
 def build_memory(user_message: str, limit: int = 5,):
 
-    memories = search_memories(
+    memories = search(
         user_message,
         limit=limit,
     )
@@ -2723,6 +3411,1234 @@ def debug_brain(brain):
 
 
 ================================================
+FILE: backend/services/memory/embedding_service.py
+================================================
+import os
+
+from google import genai
+
+from config import Config
+
+
+client = genai.Client(
+    api_key=Config.GEMINI_API_KEY
+)
+
+import json
+
+from repositories.memory_embedding_repository import (
+    save_embedding,
+)
+
+
+MODEL = "gemini-embedding-001"
+
+
+def create_embedding(text: str):
+
+    response = client.models.embed_content(
+        model=MODEL,
+        contents=text
+    )
+
+    return response.embeddings[0].values
+
+def create_and_store_embedding(
+    memory_id: int,
+    text: str,
+):
+    embedding = create_embedding(text)
+
+    embedding_json = json.dumps(
+        embedding
+    )
+
+    save_embedding(
+        memory_id=memory_id,
+        model=MODEL,
+        embedding=embedding_json,
+    )
+
+
+================================================
+FILE: backend/services/memory/embedding_sync.py
+================================================
+import json
+
+from services.memory.embedding_service import (
+    create_embedding,
+    MODEL,
+)
+
+from repositories.memory_embedding_repository import (
+    update_embedding,
+)
+
+
+def sync_memory_embedding(memory):
+
+    embedding = create_embedding(
+        memory.memory
+    )
+
+    embedding_json = json.dumps(
+        embedding
+    )
+
+    return update_embedding(
+        memory_id=memory.id,
+        model=MODEL,
+        embedding=embedding_json,
+    )
+
+
+================================================
+FILE: backend/services/memory/entity_candidate_merger.py
+================================================
+def merge_entity_candidates(
+    candidates: list[dict],
+):
+    """
+    Merges duplicate and overlapping candidates.
+
+    NER candidates provide context, while proper-noun
+    candidates can provide more precise entity names.
+    """
+
+    if not candidates:
+        return []
+
+    cleaned = []
+
+    for candidate in candidates:
+
+        entity_text = candidate["text"].strip()
+
+        if not entity_text:
+            continue
+
+        cleaned.append({
+            **candidate,
+            "text": entity_text,
+        })
+
+    # --------------------------------
+    # Remove exact duplicates
+    # --------------------------------
+
+    unique = []
+
+    seen = set()
+
+    for candidate in cleaned:
+
+        key = (
+            candidate["text"].lower(),
+            candidate.get("source"),
+        )
+
+        if key in seen:
+            continue
+
+        seen.add(key)
+
+        unique.append(candidate)
+
+    # --------------------------------
+    # Remove proper-noun fragments
+    # that are merely parts of a
+    # longer proper-noun candidate.
+    # --------------------------------
+
+    merged = []
+
+    for candidate in unique:
+
+        candidate_text = candidate["text"].lower()
+
+        if candidate.get("source") != "proper_noun":
+            merged.append(candidate)
+            continue
+
+        # Check whether this proper noun is part
+        # of another proper-noun candidate.
+        is_fragment = False
+
+        for other in unique:
+
+            if candidate is other:
+                continue
+
+            if other.get("source") != "proper_noun":
+                continue
+
+            other_text = other["text"].lower()
+
+            if (
+                candidate_text != other_text
+                and candidate_text in other_text
+            ):
+                is_fragment = True
+                break
+
+        if not is_fragment:
+            merged.append(candidate)
+
+    # --------------------------------
+    # If a proper noun exists inside a
+    # larger NER phrase, keep both.
+    #
+    # Example:
+    #
+    # "the AI Jeycel" → NER
+    # "Jeycel"        → proper_noun
+    #
+    # Both survive for interpretation.
+    # --------------------------------
+
+    return merged
+
+
+================================================
+FILE: backend/services/memory/entity_candidates.py
+================================================
+import spacy
+
+
+nlp = spacy.load("en_core_web_sm")
+
+
+def extract_entity_candidates(text: str):
+    """
+    Extracts possible entity phrases from text.
+
+    This does NOT decide what an entity is.
+    It only generates candidates for the
+    interpretation layer.
+    """
+
+    doc = nlp(text)
+
+    candidates = []
+
+    # 1. spaCy named entities
+    for entity in doc.ents:
+
+        candidates.append({
+            "text": entity.text.strip(),
+            "source": "ner",
+            "source_type": entity.label_,
+        })
+
+    # 2. Proper nouns that spaCy may have missed
+    for token in doc:
+
+        if token.pos_ == "PROPN":
+
+            candidate = token.text.strip()
+
+            if not candidate:
+                continue
+
+            # Avoid duplicates
+            already_exists = any(
+                item["text"].lower() == candidate.lower()
+                for item in candidates
+            )
+
+            if not already_exists:
+
+                candidates.append({
+                    "text": candidate,
+                    "source": "proper_noun",
+                    "source_type": None,
+                })
+
+    return candidates
+
+
+================================================
+FILE: backend/services/memory/entity_extractor.py
+================================================
+import spacy
+
+
+nlp = spacy.load("en_core_web_sm")
+
+
+def extract_entities(text: str):
+    """
+    Dynamically extracts named entities from text.
+
+    Returns:
+        [
+            {
+                "text": "...",
+                "type": "..."
+            }
+        ]
+    """
+
+    doc = nlp(text)
+
+    entities = []
+
+    for entity in doc.ents:
+
+        entities.append({
+            "text": entity.text,
+            "type": entity.label_,
+        })
+
+    return entities
+
+
+================================================
+FILE: backend/services/memory/entity_interpreter.py
+================================================
+def interpret_entities(
+    text: str,
+    candidates: list[dict],
+):
+    """
+    Interprets entity candidates using their
+    extracted source information and context.
+
+    This layer decides what each candidate
+    represents. It does not resolve the entity
+    to a database record yet.
+    """
+
+    interpreted = []
+
+    for candidate in candidates:
+
+        entity_text = candidate["text"].strip()
+        source_type = candidate.get("source_type")
+
+        normalized_type = "UNKNOWN"
+
+        # Strong evidence from spaCy
+        if source_type == "PERSON":
+            normalized_type = "PERSON"
+
+        elif source_type == "ORG":
+            normalized_type = "ORGANIZATION"
+
+        elif source_type in {
+            "LOC",
+            "GPE",
+            "FAC",
+        }:
+            normalized_type = "PLACE"
+
+        # Contextual interpretation
+        words = text.lower()
+
+        if entity_text.lower() == "ai":
+            normalized_type = "CONCEPT"
+
+        elif (
+            "project " in words
+            and entity_text.lower().startswith("project ")
+        ):
+            normalized_type = "PROJECT"
+
+        interpreted.append({
+            "text": entity_text,
+            "type": normalized_type,
+            "source": candidate.get("source"),
+            "source_type": source_type,
+        })
+
+    return interpreted
+
+
+================================================
+FILE: backend/services/memory/entity_normalizer.py
+================================================
+def normalize_entities(
+    text: str,
+    entities: list[dict],
+):
+    """
+    Converts spaCy entity results into
+    Project Lecyrus entity types.
+
+    Does not hard-code specific people,
+    places, or organizations.
+    """
+
+    normalized = []
+
+    for entity in entities:
+
+        entity_text = entity["text"].strip()
+        entity_type = entity["type"]
+
+        # Start with spaCy's classification.
+        normalized_type = "UNKNOWN"
+
+        if entity_type == "PERSON":
+            normalized_type = "PERSON"
+
+        elif entity_type == "ORG":
+            normalized_type = "ORGANIZATION"
+
+        elif entity_type == "GPE":
+            normalized_type = "PLACE"
+
+        elif entity_type in {
+            "LOC",
+            "FAC",
+        }:
+            normalized_type = "PLACE"
+
+        elif entity_type in {
+            "PRODUCT",
+            "WORK_OF_ART",
+        }:
+            normalized_type = "CONCEPT"
+
+        normalized.append({
+            "text": entity_text,
+            "type": normalized_type,
+            "source_type": entity_type,
+        })
+
+    return normalized
+
+
+================================================
+FILE: backend/services/memory/entity_resolver.py
+================================================
+from repositories.entity_repository import (
+    find_entity_by_name,
+    create_entity,
+)
+
+from repositories.transaction_repository import (
+    flush,
+    commit,
+    rollback,
+)
+
+
+def resolve_entity(
+    name: str,
+    entity_type: str,
+):
+
+    existing = find_entity_by_name(
+        name,
+        entity_type,
+    )
+
+    if existing:
+        return existing
+
+    try:
+
+        entity = create_entity(
+            name=name,
+            entity_type=entity_type,
+        )
+
+        flush()
+        commit()
+
+        return entity
+
+    except Exception:
+
+        rollback()
+
+        raise
+
+def resolve_entities(
+    entities: list[dict],
+):
+    resolved = []
+
+    for entity in entities:
+
+        resolved_entity = resolve_entity(
+            name=entity["text"],
+            entity_type=entity["type"],
+        )
+
+        resolved.append(
+            resolved_entity
+        )
+
+    return resolved
+
+
+================================================
+FILE: backend/services/memory/hybrid_search.py
+================================================
+from services.memory.keyword_search import (
+    search_memories,
+)
+
+from services.memory.semantic_search import (
+    semantic_search,
+)
+
+from services.memory_entity_service import (
+    get_memories_for_entities,
+)
+
+from services.memory.entity_candidates import (
+    extract_entity_candidates,
+)
+
+from services.memory.entity_interpreter import (
+    interpret_entities,
+)
+
+from services.memory.entity_candidate_merger import (
+    merge_entity_candidates,
+)
+
+from services.memory.entity_resolver import (
+    resolve_entities,
+)
+
+def hybrid_search(
+    user_message: str,
+    limit: int = 5,
+):
+    entity_candidates = extract_entity_candidates(
+        user_message
+    )
+
+    interpreted_entities = interpret_entities(
+        user_message,
+        entity_candidates
+    )
+
+    merged_entities = merge_entity_candidates(
+        interpreted_entities
+    )
+
+    resolved_entities = resolve_entities(
+        merged_entities
+    )
+
+    entity_ids = [
+        entity.id
+        for entity in resolved_entities
+    ]
+
+    entity_memories = get_memories_for_entities(
+        entity_ids
+    )
+
+    # print("\n===== ENTITY RETRIEVAL TEST =====")
+
+    # print(
+    #     "Resolved entity IDs:",
+    #     entity_ids,
+    # )
+
+    # for memory in entity_memories:
+    #     print(
+    #         "Entity memory:",
+    #         memory.id,
+    #         "|",
+    #         memory.memory,
+    #     )
+
+    # print("===============================")
+
+    keyword_results = search_memories(
+        user_message,
+        limit=limit,
+    ) or []
+
+    # print("\n===== KEYWORD RESULT TEST =====")
+    # print(keyword_results)
+
+    # for result in keyword_results:
+    #     print("TYPE:", type(result))
+    #     print("VALUE:", result)
+
+    # print("==============================")
+
+    semantic_results = semantic_search(
+        user_message,
+        limit=limit,
+    ) or []
+
+    combined = {}
+
+    # Keyword search returns Memory objects.
+    for memory, score in keyword_results:
+
+        keyword_score = score
+
+        combined[memory.id] = {
+            "memory": memory,
+            "keyword_score": keyword_score,
+            "semantic_score": 0.0,
+            "entity_match": False,
+        }
+
+    # Semantic search returns (Memory, similarity_score).
+    for memory, score in semantic_results:
+
+        if memory.id not in combined:
+
+            combined[memory.id] = {
+                "memory": memory,
+                "keyword_score": 0.0,
+                "semantic_score": score,
+                "entity_match": False,
+            }
+
+        else:
+
+            combined[memory.id][
+                "semantic_score"
+            ] = score
+
+        # --------------------------------
+    # Add entity-based memories
+    # --------------------------------
+
+    for memory in entity_memories:
+
+        if memory.id not in combined:
+
+            combined[memory.id] = {
+                "memory": memory,
+                "keyword_score": 0.0,
+                "semantic_score": 0.0,
+                "entity_match": True,
+            }
+
+        else:
+
+            combined[memory.id][
+                "entity_match"
+            ] = True
+
+    ranked = []
+
+    for item in combined.values():
+
+        memory = item["memory"]
+
+        keyword_score = item["keyword_score"]
+
+        semantic_score = item["semantic_score"]
+
+        entity_score = 1.0 if item["entity_match"] else 0.0
+
+        importance_score = (
+            memory.importance / 100
+        )
+
+        retrieval_score = min(
+            memory.retrieval_count / 100,
+            1.0,
+        )
+
+        final_score = (
+            (semantic_score * 0.35)
+            +
+            ((keyword_score / 100) * 0.25)
+            +
+            (importance_score * 0.20)
+            +
+            (retrieval_score * 0.10)
+            +
+            (entity_score * 0.10)
+        )
+
+        ranked.append(
+            (
+                memory,
+                final_score,
+            )
+        )
+
+    ranked.sort(
+        key=lambda x: x[1],
+        reverse=True,
+    )
+
+    # print("\n===== HYBRID SEARCH RESULTS =====")
+
+    # for memory, score in ranked[:limit]:
+    #     print(
+    #         f"Memory ID: {memory.id} | "
+    #         f"Score: {score:.6f} | "
+    #         f"Memory: {memory.memory}"
+    #     )
+
+    # print("==============================")
+
+    return [
+        memory
+        for memory, _ in ranked[:limit]
+    ]
+
+
+================================================
+FILE: backend/services/memory/keyword_search.py
+================================================
+import re
+
+from services.memory_service import load_memories
+from repositories.memory_repository import increment_retrieval_count
+
+RECALL_KEYWORDS = {
+    "remember",
+    "know",
+    "about",
+    "me",
+    "myself",
+}
+
+
+STOP_WORDS = {
+    "i",
+    "am",
+    "is",
+    "are",
+    "the",
+    "a",
+    "an",
+    "of",
+    "to",
+    "for",
+    "and",
+    "my",
+    "me",
+    "you",
+    "your",
+    "in",
+    "on",
+    "at",
+}
+
+
+def normalize(text: str) -> str:
+    """Lowercase and remove punctuation."""
+
+    text = text.lower()
+
+    text = re.sub(r"[^a-z0-9\s]", "", text)
+
+    return text
+
+
+def search_memories(user_message: str, limit: int = 5):
+    """
+    Search the most relevant memories using keyword matching.
+    Returns only the highest-ranked memories.
+    """
+
+    memories = load_memories()
+
+    if not memories:
+        return []
+
+    normalized_query = normalize(user_message)
+    print("Original:", user_message)
+    print("Normalized:", normalized_query)
+    print("Recall Keywords:", RECALL_KEYWORDS)
+
+    query_words = set(normalized_query.split())
+
+    if (
+        "remember" in query_words
+        or (
+            "know" in query_words
+            and "me" in query_words
+        )
+        or (
+            "about" in query_words
+            and "me" in query_words
+        )
+    ):
+
+        print("🔥 RECALL MODE ACTIVATED")
+        memories.sort(
+            key=lambda m: m.importance,
+            reverse=True,
+        )
+        return memories[:limit]
+
+    words = {
+        word
+        for word in normalize(user_message).split()
+        if word not in STOP_WORDS
+    }
+
+    scored = []
+
+    for memory in memories:
+
+        memory_words = {
+            word
+            for word in normalize(memory.memory).split()
+            if word not in STOP_WORDS
+        }
+
+        matches = len(words & memory_words)
+
+        if matches == 0:
+            continue
+
+        score = (
+            matches * 10
+        ) + memory.importance
+
+        scored.append(
+            (score, memory)
+        )
+
+    scored.sort(
+        key=lambda x: x[0],
+        reverse=True,
+    )
+
+    results = []
+
+    for score, memory in scored[:limit]:
+
+        increment_retrieval_count(
+            memory
+        )
+
+        results.append(
+            (
+                memory,
+                score,
+            )
+        )
+
+    return results
+
+
+================================================
+FILE: backend/services/memory/memory_consolidation.py
+================================================
+import json
+
+from services.memory.embedding_service import create_embedding
+from repositories.memory_embedding_repository import (
+    get_embedding_by_memory_id,
+    get_all_embeddings,
+)
+
+from repositories.memory_repository import (
+    get_memory_by_id,
+)
+
+
+def find_related_memories(
+    memory,
+    threshold: float = 0.85,
+    limit: int = 10,
+):
+    """
+    Finds memories that are semantically
+    similar to the given memory.
+
+    Detection only.
+    Does not modify the database.
+    """
+
+    target_embedding_record = (
+        get_embedding_by_memory_id(
+            memory.id
+        )
+    )
+
+    if not target_embedding_record:
+        return []
+
+    target_embedding = json.loads(
+        target_embedding_record.embedding
+    )
+
+    embeddings = get_all_embeddings()
+
+    results = []
+
+    for embedding in embeddings:
+
+        # Don't compare the memory with itself.
+        if embedding.memory_id == memory.id:
+            continue
+
+        stored_embedding = json.loads(
+            embedding.embedding
+        )
+
+        score = cosine_similarity(
+            target_embedding,
+            stored_embedding,
+        )
+
+        if score >= threshold:
+
+            related_memory = get_memory_by_id(
+                embedding.memory_id
+            )
+
+            if related_memory:
+                results.append(
+                    (
+                        related_memory,
+                        score,
+                    )
+                )
+
+    results.sort(
+        key=lambda x: x[1],
+        reverse=True,
+    )
+
+    return results[:limit]
+
+
+def cosine_similarity(
+    vector1: list[float],
+    vector2: list[float],
+):
+
+    dot_product = sum(
+        a * b
+        for a, b in zip(vector1, vector2)
+    )
+
+    magnitude1 = (
+        sum(a * a for a in vector1)
+        ** 0.5
+    )
+
+    magnitude2 = (
+        sum(b * b for b in vector2)
+        ** 0.5
+    )
+
+    if magnitude1 == 0 or magnitude2 == 0:
+        return 0.0
+
+    return dot_product / (
+        magnitude1 * magnitude2
+    )
+
+
+================================================
+FILE: backend/services/memory/memory_deduplication.py
+================================================
+import json
+
+from services.memory.embedding_service import create_embedding
+from services.memory.similarity import cosine_similarity
+
+from repositories.memory_embedding_repository import (
+    get_embeddings_by_conversation,
+)
+
+from repositories.memory_repository import (
+    get_memory_by_id,
+)
+
+
+DEDUPLICATION_THRESHOLD = 0.85
+
+
+def find_semantic_duplicate(
+    conversation_id: int,
+    new_memory: str,
+):
+
+    new_embedding = create_embedding(
+        new_memory
+    )
+
+    embeddings = get_embeddings_by_conversation(
+        conversation_id
+    )
+
+    best_memory = None
+    best_score = 0.0
+
+    for embedding in embeddings:
+
+        stored_embedding = json.loads(
+            embedding.embedding
+        )
+
+        score = cosine_similarity(
+            new_embedding,
+            stored_embedding,
+        )
+
+        if score > best_score:
+
+            best_score = score
+
+            best_memory = get_memory_by_id(
+                embedding.memory_id
+            )
+
+    print("\n===== MEMORY DEDUPLICATION =====")
+    print("New:", new_memory)
+    print("Best Score:", best_score)
+
+    if best_memory:
+        print("Best Match:", best_memory.memory)
+    else:
+        print("Best Match: None")
+
+    print("================================")
+
+    if best_score >= DEDUPLICATION_THRESHOLD:
+
+        return best_memory
+
+    return None
+
+
+================================================
+FILE: backend/services/memory/search_engine.py
+================================================
+from services.memory.hybrid_search import hybrid_search
+
+
+def search(user_message, limit=5):
+
+    return hybrid_search(
+        user_message,
+        limit,
+    )
+
+
+================================================
+FILE: backend/services/memory/semantic_search.py
+================================================
+import json
+
+from services.memory.embedding_service import (
+    create_embedding,
+)
+
+from services.memory.similarity import (
+    cosine_similarity,
+)
+
+from services.memory.vector_index import (
+    get_candidate_embeddings,
+)
+
+from repositories.memory_repository import (
+    get_memory_by_id,
+)
+
+def semantic_search(
+    user_message: str,
+    limit: int = 5,
+):
+    """
+    Returns the most semantically
+    similar memories.
+    """
+
+    user_embedding = create_embedding(
+        user_message
+    )
+
+    embeddings = get_candidate_embeddings()
+
+    results = []
+
+    for embedding in embeddings:
+
+        stored_embedding = json.loads(
+            embedding.embedding
+        )
+
+        score = cosine_similarity(
+            user_embedding,
+            stored_embedding,
+        )
+
+        SIMILARITY_THRESHOLD = 0.60
+
+        if score >= SIMILARITY_THRESHOLD:
+
+            results.append(
+                (
+                    embedding,
+                    score,
+                )
+            )
+            
+    results.sort(
+        key=lambda x: x[1],
+        reverse=True,
+    )
+
+    top_memories = []
+
+    for embedding, score in results[:limit]:
+
+        memory = get_memory_by_id(
+            embedding.memory_id
+        )
+
+        if memory:
+
+            top_memories.append(
+                (
+                    memory,
+                    score,
+                )
+            )
+
+    return top_memories
+
+def find_semantically_similar_memory(
+    memory_text: str,
+    limit: int = 5,
+    threshold: float = 0.75,
+):
+    """
+    Finds existing memories that are
+    semantically similar to the supplied memory.
+    """
+
+    memory_embedding = create_embedding(
+        memory_text
+    )
+
+    embeddings = get_candidate_embeddings()
+
+    results = []
+
+    for embedding in embeddings:
+
+        stored_embedding = json.loads(
+            embedding.embedding
+        )
+
+        score = cosine_similarity(
+            memory_embedding,
+            stored_embedding,
+        )
+
+        if score >= threshold:
+
+            memory = get_memory_by_id(
+                embedding.memory_id
+            )
+
+            if memory:
+
+                results.append(
+                    (
+                        memory,
+                        score,
+                    )
+                )
+
+    results.sort(
+        key=lambda x: x[1],
+        reverse=True,
+    )
+
+    return results[:limit]
+
+
+================================================
+FILE: backend/services/memory/similarity.py
+================================================
+import math
+
+def cosine_similarity(
+    vector1: list[float],
+    vector2: list[float],
+):
+
+    dot_product = sum(
+        a * b
+        for a, b in zip(vector1, vector2)
+    )
+
+    magnitude1 = math.sqrt(
+        sum(a * a for a in vector1)
+    )
+
+    magnitude2 = math.sqrt(
+        sum(b * b for b in vector2)
+    )
+
+    if magnitude1 == 0 or magnitude2 == 0:
+        return 0.0
+
+    return dot_product / (
+        magnitude1 * magnitude2
+    )
+
+
+================================================
+FILE: backend/services/memory/vector_index.py
+================================================
+from repositories.memory_embedding_repository import (
+    get_all_embeddings,
+)
+
+
+def get_candidate_embeddings():
+    """
+    Returns embeddings that semantic search
+    should compare against.
+
+    Currently loads all embeddings.
+
+    Later this will use:
+    - FAISS
+    - ChromaDB
+    - pgvector
+    - Pinecone
+    without changing Semantic Search.
+    """
+
+    return get_all_embeddings()
+
+
+================================================
+FILE: backend/services/memory/working_memory.py
+================================================
+from services.memory.hybrid_search import (
+    hybrid_search,
+)
+
+
+WORKING_MEMORY_LIMIT = 5
+
+
+def build_working_memory(
+    user_message: str,
+):
+
+    memories = hybrid_search(
+        user_message,
+        limit=WORKING_MEMORY_LIMIT,
+    )
+
+    return memories
+
+
+================================================
 FILE: backend/services/prompts/behavior_prompt.py
 ================================================
 def build_behavior_prompt(behavior):
@@ -2792,7 +4708,7 @@ FILE: backend/services/prompts/memory_consolidation_prompt.py
 ================================================
 def build_memory_consolidation_prompt():
     return """
-You are Project-60's memory consolidation engine.
+You are memory consolidation engine.
 
 You receive the user's long-term memories.
 
@@ -3017,6 +4933,116 @@ MEMORY_LAYOUT = [
 
 
 ================================================
+FILE: backend/services/prompts/reflection_prompt.py
+================================================
+def build_reflection_prompt():
+
+    return """
+You are the Reflection Engine of Project Lecyrus.
+
+Your purpose is to analyze MANY memories together and discover
+higher-level knowledge about the user.
+
+Do not simply rewrite or summarize individual memories.
+
+Look for patterns across the entire collection.
+
+You may infer:
+
+- preferences
+- interests
+- personality traits
+- habits
+- skills
+- goals
+- motivations
+- relationships
+- recurring behaviors
+- long-term tendencies
+- connections between different areas of the user's life
+
+IMPORTANT:
+
+Reflection is allowed to infer information that is not explicitly
+written in a single memory.
+
+However, every inference must be reasonably supported by the
+combined evidence from the memories.
+
+Do not introduce specific details that the memories do not support.
+
+Example:
+
+Memories:
+- Neil likes Python.
+- Neil builds Project Lecyrus using Python.
+- Neil studies machine learning.
+- Neil works on AI projects.
+
+Good reflection:
+"Neil has a strong long-term interest in AI and software development."
+
+Bad reflection:
+"Neil prefers Python backend development."
+
+The first conclusion is supported by several memories.
+The second introduces a specific preference for backend development
+that the memories do not establish.
+
+Another example:
+
+Memories:
+- Neil repeatedly creates poetry.
+- Neil experiments with different poetic styles.
+- Neil performs his poems.
+
+Good reflection:
+"Neil consistently expresses himself through poetry and enjoys
+developing his own writing style."
+
+This is a reasonable higher-level inference.
+
+Reflection should therefore operate at different levels:
+
+LEVEL 1:
+Direct facts that are strongly connected.
+
+LEVEL 2:
+Patterns discovered across multiple memories.
+
+LEVEL 3:
+Higher-level traits inferred from repeated patterns.
+
+LEVEL 4:
+Connections between different categories of memories.
+
+Prefer useful higher-level knowledge over trivial repetition.
+
+Do not create a reflection when there is no meaningful pattern.
+
+Do not hallucinate facts.
+
+Do not assume information that has no supporting evidence.
+
+Return ONLY valid JSON.
+
+Format:
+
+[
+    {
+        "memory": "...",
+        "category": "...",
+        "importance": 90
+    }
+]
+
+If no meaningful reflection can be produced:
+
+[]
+"""
+
+
+================================================
 FILE: backend/services/prompts/relationship_prompt.py
 ================================================
 def build_relationship_prompt(relationship):
@@ -3136,6 +5162,281 @@ def build_thought_prompt(thought):
         )
 
     return prompt
+
+
+================================================
+FILE: backend/services/reflection/memory_consolidator.py
+================================================
+from services.memory.semantic_search import (
+    find_semantically_similar_memory,
+)
+
+
+def consolidate_memory(
+    reflection,
+    conversation_id,
+):
+    similar_memories = find_semantically_similar_memory(
+        reflection["memory"],
+        limit=1,
+        threshold=0.85,
+    )
+
+    if not similar_memories:
+
+        return {
+            "action": "new",
+            "memory": reflection,
+        }
+
+    existing, score = similar_memories[0]
+
+    if score >= 0.90:
+
+        return {
+            "action": "skip",
+            "memory": existing,
+            "score": score,
+        }
+
+    return {
+        "action": "update",
+        "memory": existing,
+        "score": score,
+    }
+
+
+================================================
+FILE: backend/services/reflection/reflection_engine.py
+================================================
+import json
+
+from google import genai
+from google.genai import types
+
+from config import Config
+
+from services.prompts.reflection_prompt import (
+    build_reflection_prompt,
+)
+
+client = genai.Client(
+    api_key=Config.GEMINI_API_KEY,
+)
+
+
+def reflect(memories):
+
+    memory_text = "\n".join(
+        f"- {memory.memory}"
+        for memory in memories
+    )
+
+    response = client.models.generate_content(
+        model="gemini-2.5-flash",
+        config=types.GenerateContentConfig(
+            system_instruction=build_reflection_prompt(),
+        ),
+        contents=memory_text,
+    )
+
+    text = response.text.strip()
+
+    if text.startswith("```json"):
+        text = text.removeprefix("```json").removesuffix("```").strip()
+
+    elif text.startswith("```"):
+        text = text.removeprefix("```").removesuffix("```").strip()
+
+    return json.loads(text)
+
+
+================================================
+FILE: backend/services/reflection/reflection_scheduler.py
+================================================
+from services.reflection.reflection_service import (
+    run_reflection,
+)
+
+REFLECTION_INTERVAL = 5
+
+
+def should_reflect(
+    message_count: int,
+):
+
+    return (
+        message_count > 0
+        and
+        message_count % REFLECTION_INTERVAL == 0
+    )
+
+
+def process_reflection(
+    message_count: int,
+):
+
+    if should_reflect(
+        message_count
+    ):
+
+        print(
+            "\n🧠 Running Reflection...\n"
+        )
+
+        return run_reflection()
+
+    return []
+
+
+================================================
+FILE: backend/services/reflection/reflection_service.py
+================================================
+from repositories.conversation_repository import (
+    get_or_create_conversation,
+)
+
+from repositories.memory_repository import (
+    get_unreflected_memories,
+    mark_reflected,
+    update_memory,
+)
+
+from services.memory_service import (
+    save_extracted_memories,
+)
+
+from services.reflection.reflection_engine import (
+    reflect,
+)
+
+from services.reflection.reflection_validator import (
+    validate_reflections,
+)
+
+from services.reflection.memory_consolidator import (
+    consolidate_memory,
+)
+
+from services.memory.embedding_sync import (
+    sync_memory_embedding,
+)
+
+def run_reflection():
+    conversation = get_or_create_conversation()
+    memories = get_unreflected_memories()
+
+    if not memories:
+        return []
+
+    reflections = reflect(
+        memories
+    )
+
+    reflections = validate_reflections(
+        reflections,
+        conversation.id,
+    )
+
+    if not reflections:
+        mark_reflected(memories)
+        return []
+
+    for reflection in reflections:
+
+        result = consolidate_memory(
+            reflection,
+            conversation.id,
+        )
+
+        if result["action"] == "new":
+
+            new_memories = save_extracted_memories([
+                reflection
+            ])
+
+            for memory in new_memories:
+
+                sync_memory_embedding(
+                    memory
+                )
+
+        elif result["action"] == "update":
+
+            existing = result["memory"]
+
+            update_memory(
+                existing,
+                reflection["memory"],
+                reflection["importance"],
+            )
+
+            sync_memory_embedding(
+                existing
+            )
+            
+    mark_reflected(
+        memories
+    )
+
+    return reflections
+
+
+================================================
+FILE: backend/services/reflection/reflection_validator.py
+================================================
+from repositories.memory_repository import (
+    find_similar_memory,
+)
+
+
+def validate_reflections(
+    reflections,
+    conversation_id,
+):
+    if not isinstance(reflections, list):
+        return []
+
+    valid = []
+
+    for reflection in reflections:
+
+        if not isinstance(reflection, dict):
+            continue
+
+        memory = reflection.get("memory")
+        category = reflection.get("category")
+        importance = reflection.get("importance")
+
+        if not memory:
+            continue
+
+        if not category:
+            continue
+
+        if not isinstance(importance, int):
+            continue
+
+        importance = max(
+            1,
+            min(importance, 100)
+        )
+
+        existing = find_similar_memory(
+            conversation_id,
+            memory,
+        )
+
+        if existing:
+            continue
+
+        valid.append({
+            "memory": memory.strip(),
+            "category": category.strip(),
+            "importance": importance,
+        })
+
+    return valid
 
 
 ================================================
