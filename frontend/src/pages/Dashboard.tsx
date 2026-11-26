@@ -7,19 +7,24 @@ import AIStatus from "../components/dashboard/AIStatus";
 
 export default function Dashboard() {
   return (
-    <div className="container-fluid">
+    <div className="dashboard-container">
       <Hero />
-      <br />
 
-      <StatsGrid />
+      <section className="dashboard-section">
+        <StatsGrid />
+      </section>
 
-      <RecentActivity />
+      <section className="dashboard-section">
+        <RecentActivity />
+      </section>
 
-      <QuickActions />
+      <section className="dashboard-section">
+        <QuickActions />
+      </section>
 
-      <AIStatus />
-
-
+      <section className="dashboard-section">
+        <AIStatus />
+      </section>
     </div>
   );
 }

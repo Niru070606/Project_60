@@ -1,50 +1,89 @@
-.quick-actions{
-    margin-top:1.5rem;
-    padding:1.5rem;
+.quick-actions {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-light);
 }
 
-.action-grid{
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-
-    gap:1rem;
-
+.quick-actions:hover {
+    box-shadow: var(--shadow-dark);
+    transform: translateY(-2px);
 }
 
-.action-btn{
-
-    display:flex;
-
-    flex-direction:column;
-
-    align-items:center;
-
-    justify-content:center;
-
-    gap:.8rem;
-
-    padding:1.5rem;
-
-    background:var(--surface);
-
-    color:var(--text);
-
-    border:1px solid var(--border);
-
-    border-radius:var(--radius-lg);
-
-    cursor:pointer;
-
-    transition:var(--transition);
-
+.section-title {
+    margin-bottom: 1.25rem;
+    color: var(--text);
+    font-size: 1.15rem;
+    font-weight: 600;
+    position: relative;
+    padding-left: 0.75rem;
 }
 
-.action-btn:hover{
+.section-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 24px;
+    background: var(--primary);
+    border-radius: 2px;
+}
 
-    transform:translateY(-3px);
+.action-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+}
 
-    background:var(--surface-hover);
+.action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
 
+    padding: 1.5rem 1rem;
+
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+
+    border: none;
+    border-radius: var(--radius-lg);
+
+    cursor: pointer;
+
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: center;
+    line-height: 1.4;
+
+    transition: var(--transition);
+
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
+    filter: brightness(1.05);
+}
+
+.action-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.15);
+}
+
+.action-btn:focus-visible {
+    outline: 2px solid var(--secondary);
+    outline-offset: 2px;
+}
+
+.action-btn .lucide {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
 }

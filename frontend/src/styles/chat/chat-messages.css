@@ -1,11 +1,33 @@
-.chat-messages{
+.chat-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    padding: 0 1rem;
+    overflow-y: auto;
+    height: 100%;
+}
 
-    display:flex;
+.chat-messages-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    min-height: 0;
+}
 
-    flex-direction:column;
+.chat-messages::-webkit-scrollbar {
+    display: none;
+}
 
-    gap:.5rem;
+.chat-messages-container::-webkit-scrollbar {
+    display: none;
+}
 
-    margin-top:1rem;
-
+.chat-messages::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: transparent;
 }

@@ -1,6 +1,9 @@
-import "./../../styles/dashboard/hero.css";
+import "../../styles/dashboard/hero.css";
 
+import { useEffect, useState } from "react";
 import { MessageCircle } from "lucide-react";
+
+import { getPersonality } from "../../services/DashboardApi";
 
 export default function Hero() {
   const hour = new Date().getHours();
@@ -13,13 +16,25 @@ export default function Hero() {
     greeting = "Good Afternoon";
   }
 
+  const [personalityName, setPersonalityName] = useState("Project-60");
+
+  useEffect(() => {
+    getPersonality()
+      .then((data) => {
+        if (data && data.identity?.name) {
+          setPersonalityName(data.identity.name);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <section className="hero card-theme">
       <div className="hero-content">
         <div>
           <span className="hero-greeting">{greeting}, Neil 👋</span>
 
-          <h1 className="hero-title">Project-60</h1>
+          <h1 className="hero-title">{personalityName}</h1>
 
           <p className="hero-description">
             Your AI companion that grows with you.

@@ -30,11 +30,14 @@ from services.memory.entity_interpreter import (
 from services.memory.entity_candidate_merger import (
     merge_entity_candidates,
 )
-from services.memory_entity_service import (
-    link_memory_to_resolved_entities,
-)
 from services.memory.entity_candidates import (
     extract_entity_candidates
+)
+from services.memory.memory_merger import (
+    auto_merge_on_new_memory,
+)
+from services.memory_entity_service import (
+    link_memory_to_resolved_entities,
 )
 
 def create_memory(
@@ -88,6 +91,13 @@ def create_memory(
         )
 
         commit()
+
+        # Auto-merge with similar existing memories
+        auto_merge_on_new_memory(
+            conversation.id,
+            memory,
+            memory_record.id
+        )
 
         return memory_record
 

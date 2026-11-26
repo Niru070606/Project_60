@@ -1,13 +1,16 @@
-[data-theme="dark"]{
+[data-theme="dark"] {
 
     --bg:#020617;
 
     --surface:#0F172A;
+    --surface-hover:#1E293B;
 
     --text:#F8FAFC;
-
     --text-secondary:#94A3B8;
 
     --border:#334155;
+    --border-lighter:#475569;
 
+    --shadow-light:0 2px 8px rgba(0,0,0,0.2);
+    --shadow-dark:0 8px 24px rgba(0,0,0,0.5);
 }

@@ -50,7 +50,7 @@ def merge_entity_candidates(
     # --------------------------------
     # Remove proper-noun fragments
     # that are merely parts of a
-    # longer proper-noun candidate.
+    # longer candidate (NER or proper_noun).
     # --------------------------------
 
     merged = []
@@ -64,15 +64,12 @@ def merge_entity_candidates(
             continue
 
         # Check whether this proper noun is part
-        # of another proper-noun candidate.
+        # of any other candidate (NER or proper_noun).
         is_fragment = False
 
         for other in unique:
 
             if candidate is other:
-                continue
-
-            if other.get("source") != "proper_noun":
                 continue
 
             other_text = other["text"].lower()
@@ -86,17 +83,5 @@ def merge_entity_candidates(
 
         if not is_fragment:
             merged.append(candidate)
-
-    # --------------------------------
-    # If a proper noun exists inside a
-    # larger NER phrase, keep both.
-    #
-    # Example:
-    #
-    # "the AI Jeycel" → NER
-    # "Jeycel"        → proper_noun
-    #
-    # Both survive for interpretation.
-    # --------------------------------
 
     return merged

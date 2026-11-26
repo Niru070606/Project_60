@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 
 import ChatHeader from "../components/chat/ChatHeader";
@@ -58,7 +57,7 @@ export default function Chat() {
       await loadMessages();
 
       setIsTyping(false);
-      setIsLoading(false);;
+      setIsLoading(false) ;;
     } catch (error) {
       console.error("Failed to send message:", error);
 
@@ -78,7 +77,7 @@ export default function Chat() {
 
   return (
     <div
-      className="container-fluid d-flex flex-column"
+      className="chat-container d-flex flex-column"
       style={{ height: "100vh" }}
     >
       <ChatHeader />
@@ -92,7 +91,7 @@ export default function Chat() {
         </button>
       </div>
 
-      <div className="flex-grow-1 overflow-auto" style={{ minHeight: 0 }}>
+      <div className="chat-messages-container flex-grow-1">
         <ChatMessages messages={messages} isTyping={isTyping} />
       </div>
 
@@ -100,4 +99,3 @@ export default function Chat() {
     </div>
   );
 }
-

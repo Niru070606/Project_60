@@ -18,7 +18,7 @@ def save_embedding(
     db.session.add(memory_embedding)
 
     print(
-    "🔥 SAVING EMBEDDING:",
+    "SAVING EMBEDDING:",
     memory_id,
     model,
     len(embedding)
