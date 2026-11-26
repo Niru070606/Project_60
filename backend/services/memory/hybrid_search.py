@@ -7,7 +7,7 @@ from services.memory.semantic_search import (
 )
 
 from services.memory_entity_service import (
-    get_memories_for_entities,
+    get_entity_memory_records,
 )
 
 from services.memory.entity_candidates import (
@@ -47,14 +47,33 @@ def hybrid_search(
         merged_entities
     )
 
+    
+
     entity_ids = [
         entity.id
         for entity in resolved_entities
     ]
 
-    entity_memories = get_memories_for_entities(
-        entity_ids
-    )
+    entity_matches = {}
+
+    for entity_id in entity_ids:
+
+        entity_memories = get_entity_memory_records(
+            entity_id
+        )
+
+        for memory in entity_memories:
+
+            if memory.id not in entity_matches:
+
+                entity_matches[memory.id] = {
+                    "memory": memory,
+                    "match_count": 0,
+                }
+
+            entity_matches[memory.id][
+                "match_count"
+            ] += 1
 
     # print("\n===== ENTITY RETRIEVAL TEST =====")
 
@@ -103,7 +122,7 @@ def hybrid_search(
             "memory": memory,
             "keyword_score": keyword_score,
             "semantic_score": 0.0,
-            "entity_match": False,
+            "entity_match_count": 0,
         }
 
     # Semantic search returns (Memory, similarity_score).
@@ -115,7 +134,7 @@ def hybrid_search(
                 "memory": memory,
                 "keyword_score": 0.0,
                 "semantic_score": score,
-                "entity_match": False,
+                "entity_match_count": 0,
             }
 
         else:
@@ -124,26 +143,26 @@ def hybrid_search(
                 "semantic_score"
             ] = score
 
-        # --------------------------------
-    # Add entity-based memories
     # --------------------------------
+# Add entity-based memories
+# --------------------------------
 
-    for memory in entity_memories:
+    for memory_id, entity_data in entity_matches.items():
 
-        if memory.id not in combined:
+        if memory_id not in combined:
 
-            combined[memory.id] = {
-                "memory": memory,
+            combined[memory_id] = {
+                "memory": entity_data["memory"],
                 "keyword_score": 0.0,
                 "semantic_score": 0.0,
-                "entity_match": True,
+                "entity_match_count": entity_data["match_count"],
             }
 
         else:
 
-            combined[memory.id][
-                "entity_match"
-            ] = True
+            combined[memory_id][
+                "entity_match_count"
+            ] = entity_data["match_count"]
 
     ranked = []
 
@@ -155,7 +174,13 @@ def hybrid_search(
 
         semantic_score = item["semantic_score"]
 
-        entity_score = 1.0 if item["entity_match"] else 0.0
+        entity_score = (
+            item["entity_match_count"] / len(entity_ids)
+            if entity_ids
+            else 0.0
+        )
+
+        
 
         importance_score = (
             memory.importance / 100

@@ -56,9 +56,9 @@ def search_memories(user_message: str, limit: int = 5):
         return []
 
     normalized_query = normalize(user_message)
-    print("Original:", user_message)
-    print("Normalized:", normalized_query)
-    print("Recall Keywords:", RECALL_KEYWORDS)
+    # print("Original:", user_message)
+    # print("Normalized:", normalized_query)
+    # print("Recall Keywords:", RECALL_KEYWORDS)
 
     query_words = set(normalized_query.split())
 
@@ -69,17 +69,26 @@ def search_memories(user_message: str, limit: int = 5):
             and "me" in query_words
         )
         or (
-            "about" in query_words
-            and "me" in query_words
-        )
+    normalized_query in {
+        "tell me about myself",
+        "what do you know about me",
+        "what do you remember about me",
+    }
+    )
     ):
 
-        print("🔥 RECALL MODE ACTIVATED")
-        memories.sort(
-            key=lambda m: m.importance,
-            reverse=True,
-        )
-        return memories[:limit]
+        # print("🔥 RECALL MODE ACTIVATED")
+        # memories.sort(
+        #     key=lambda m: m.importance,
+        #     reverse=True,
+        # )
+        return [
+            (
+                memory,
+                memory.importance,
+            )
+            for memory in memories[:limit]
+        ]
 
     words = {
         word
