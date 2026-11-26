@@ -20,7 +20,7 @@ app = Flask(__name__)
 
 # Database Configuration
 app.config["SQLALCHEMY_DATABASE_URI"] = (
-    "mysql+pymysql://root:@localhost/project60"
+    "mysql+pymysql://project60_admin:Project60Admin123@127.0.0.1:3306/project60"
 )
 
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
