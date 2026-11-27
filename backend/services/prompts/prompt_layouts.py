@@ -2,6 +2,7 @@ DEFAULT_LAYOUT = [
     "identity",
     "relationship",
     "behavior",
+    "mood",
     "memory",
     "thought",
     "rules",
@@ -10,6 +11,7 @@ DEFAULT_LAYOUT = [
 PROGRAMMING_LAYOUT = [
     "identity",
     "behavior",
+    "mood",
     "thought",
     "memory",
     "rules",
@@ -19,6 +21,7 @@ RELATIONSHIP_LAYOUT = [
     "identity",
     "relationship",
     "behavior",
+    "mood",
     "thought",
     "memory",
     "rules",
@@ -27,6 +30,7 @@ RELATIONSHIP_LAYOUT = [
 MEMORY_LAYOUT = [
     "identity",
     "behavior",
+    "mood",
     "memory",
     "thought",
     "rules",

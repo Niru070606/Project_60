@@ -1,3 +1,5 @@
-export default function Chat() {
-  return <h1>Mood Page</h1>;
+import MoodDashboard from "../components/mood/MoodDashboard";
+
+export default function Mood() {
+  return <MoodDashboard />;
 }

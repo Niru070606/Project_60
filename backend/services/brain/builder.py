@@ -11,9 +11,12 @@ from services.brain.thought_engine import create_thought_plan
 
 from services.brain.behavior_engine import create_behavior
 from services.prompts.thought_prompt import build_thought_prompt
+from services.prompts.mood_prompt import build_mood_prompt
 
 from services.prompts.prompt_composer import compose_prompt
 from services.prompts.behavior_prompt import build_behavior_prompt
+
+from services.mood_engine import MoodEngine
 
 from services.brain.context_manager import (
     should_load_identity,
@@ -27,6 +30,8 @@ from services.brain.context_budget import (
     get_memory_limit,
     get_history_limit,
 )
+
+from services.personality_service import get_personality
 
 
 
@@ -51,7 +56,7 @@ def build_brain(user_message):
     memory_limit = get_memory_limit(brain.intent)
     history_limit = get_history_limit(brain.intent)
 
-    
+
 
     if should_load_identity(brain.intent):
         brain.identity = build_identity()
@@ -73,11 +78,18 @@ def build_brain(user_message):
             limit=history_limit,
             )
 
+    personality = get_personality()
+    mood_engine = MoodEngine(personality=personality)
+
+    brain.mood = build_mood_prompt(
+        mood_engine.evaluate_for_response()
+    )
+
     brain.system_prompt = compose_prompt(brain)
 
 
     # debug_brain(brain)
 
-    
+
 
     return brain

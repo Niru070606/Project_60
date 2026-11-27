@@ -9,6 +9,7 @@ from routes.chat import chat_bp
 from routes.personality import personality_bp
 from routes.memory import memory_bp
 from routes.analytics import analytics_bp
+from routes.mood import mood_bp
 from models.conversation import Conversation
 from models.chat_session import ChatSession
 from models.message import Message
@@ -16,6 +17,7 @@ from models.memory import Memory
 from models.relationship import Relationship
 from models.entity import Entity
 from models.memory_entity import MemoryEntity
+from models.mood import MoodState, MoodHistory
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -39,6 +41,7 @@ app.register_blueprint(chat_bp)
 app.register_blueprint(personality_bp)
 app.register_blueprint(memory_bp)
 app.register_blueprint(analytics_bp)
+app.register_blueprint(mood_bp)
 
 @app.route("/")
 def home():

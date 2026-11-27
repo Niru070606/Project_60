@@ -29,6 +29,7 @@ def compose_prompt(brain):
         "memory": brain.memory,
         "thought": brain.thought_prompt,
         "rules": brain.rules,
+        "mood": brain.mood,
     }
 
     sections = []
